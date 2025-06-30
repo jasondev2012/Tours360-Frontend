@@ -1,0 +1,10 @@
+.with-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('../../../../../assets/images/background.jpg'); /* reemplaza con tu ruta */
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2; /* ajusta opacidad aquí */
+  z-index: 0;
+}

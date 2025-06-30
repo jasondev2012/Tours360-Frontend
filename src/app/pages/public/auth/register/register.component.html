@@ -1,0 +1,67 @@
+
+<div class="card min-h-screen align-middle relative overflow-hidden with-bg">
+    <div class="relative z-10">
+        <div class="grid grid-cols-1 w-full mb-4">
+            <div class="col-span-1">
+                <p-button (onClick)="onRegresarLoginClick()" label="Regresar al Login" icon="pi pi-arrow-left" iconPos="left" />
+            </div>
+        </div>
+        <p-stepper [value]="1" class="basis-[80rem]" [linear]="true">
+            <p-step-list>
+                <p-step [value]="1">Datos de su empresa</p-step>
+                <p-step [value]="2">Datos de su agencia</p-step>
+                <p-step [value]="3">Datos para el inicio de sesión</p-step>
+            </p-step-list>
+            <p-step-panels>
+                <p-step-panel [value]="1">
+                    <ng-template #content let-activateCallback="activateCallback">
+                        <div class="flex flex-col">
+                            <div
+                                class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 font-medium">
+                                <app-empresa></app-empresa>
+                            </div>
+                            <div class="flex pt-6 justify-end">
+                                <p-button label="Continuar" icon="pi pi-arrow-right" iconPos="right"
+                                    (onClick)="onEmpresaSiguienteClick(activateCallback)" />
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-step-panel>
+
+                <p-step-panel [value]="2">
+                    <ng-template #content let-activateCallback="activateCallback">
+                        <div class="flex flex-col">
+                            <div
+                                class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 font-medium">
+                                <app-agencia></app-agencia>
+                            </div>
+                        </div>
+                        <div class="flex pt-6 justify-between">
+                            <p-button label="Retroceder" severity="secondary" icon="pi pi-arrow-left"
+                                (onClick)="activateCallback(1)" />
+                            <p-button label="Continuar" icon="pi pi-arrow-right" iconPos="right"
+                                (onClick)="onAgenciaSiguienteClick(activateCallback)" />
+                        </div>
+                    </ng-template>
+                </p-step-panel>
+
+                <p-step-panel [value]="3">
+                    <ng-template #content let-activateCallback="activateCallback">
+                        <div class="flex flex-col">
+                            <div
+                                class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 font-medium">
+                                <app-usuario></app-usuario>
+                            </div>
+                        </div>
+                        <div class="flex pt-6 justify-between">
+                            <p-button label="Retroceder" severity="secondary" icon="pi pi-arrow-left"
+                                (onClick)="onUsuarioAtrasClick(activateCallback)" />
+                            <p-button label="Finalizar" icon="pi pi-arrow-right" iconPos="right"
+                                (onClick)="onGuardarClick()" />
+                        </div>
+                    </ng-template>
+                </p-step-panel>
+            </p-step-panels>
+        </p-stepper>
+    </div>
+</div>

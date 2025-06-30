@@ -1,0 +1,70 @@
+import { Directive, Input, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { AbstractControl, NgControl, Validators } from '@angular/forms';
+
+@Directive({
+    selector: '[appShowErrors]',
+    standalone: true // 👈 habilita el uso en entornos standalone
+})
+export class ShowErrorsDirective implements OnInit {
+    @Input('appShowErrors') control: AbstractControl | null = null;
+
+    private errorElement: HTMLElement;
+    private labelElement: HTMLElement | null = null;
+
+    constructor(
+        private el: ElementRef,
+        private ngControl: NgControl,
+        private renderer: Renderer2
+    ) {
+        this.errorElement = document.createElement('small');
+        this.errorElement.className = 'text-danger';
+        this.errorElement.style.display = 'none';
+        this.el.nativeElement.parentNode.appendChild(this.errorElement);
+    }
+
+    ngOnInit() {
+        const control = this.control || this.ngControl.control;
+        if (control) {
+            control.statusChanges?.subscribe(() => this.updateErrorMessage(control));
+
+            // Detect and append asterisk to label if the field is required
+            this.addAsteriskToLabel(control);
+        }
+    }
+
+    private updateErrorMessage(control: AbstractControl) {
+        if (control.invalid && !control.pristine) {
+            const errors = control.errors || {};
+            const messages: { [key: string]: string } = {
+                required: 'Este campo es obligatorio.',
+                minlength: `Debe tener al menos ${errors['minlength']?.requiredLength} caracteres.`,
+                maxlength: `Debe tener como máximo ${errors['maxlength']?.requiredLength} caracteres.`,
+                email: 'Debe ser un correo válido.',
+                soloNumeros: errors['soloNumeros'], // Mensaje del validador personalizado
+                soloTexto: errors['soloTexto'] // Mensaje del validador personalizado
+            };
+            const firstErrorKey: any = Object.keys(errors)[0];
+            const message = firstErrorKey in messages ? messages[firstErrorKey] : 'Valor no válido.';
+            this.errorElement.textContent = message || 'Valor no válido.';
+            this.errorElement.style.display = 'block';
+        } else {
+            this.errorElement.style.display = 'none';
+        }
+    }
+
+    private addAsteriskToLabel(control: AbstractControl) {
+        // Si el control tiene la validación required
+        if (control.hasValidator(Validators.required)) {
+            // Buscar el elemento <label> correspondiente
+            this.labelElement = this.el.nativeElement.closest('div').querySelector('label');
+
+            if (this.labelElement) {
+                // Agregar el asterisco a la etiqueta de <label>
+                const asterisk = this.renderer.createElement('span');
+                this.renderer.addClass(asterisk, 'text-danger');
+                this.renderer.setProperty(asterisk, 'textContent', '*');
+                this.renderer.appendChild(this.labelElement, asterisk);
+            }
+        }
+    }
+}

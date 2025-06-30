@@ -1,0 +1,11 @@
+
+<div class="grid grid-cols-12" [formGroup]="agenciaForm">
+    <div class="col-span-12 lg:col-span-6 md:col-span-6 p-3">
+        <label for="class">URL Nombre (https://tours360.pe/<b>{{agenciaForm.get('nombreUrl')?.value}}</b>)</label>
+        <input formControlName="nombreUrl" [appShowErrors]="agenciaForm.get('nombreUrl')" type="text" class="w-full" pInputText />
+    </div>
+    <div class="col-span-12 lg:col-span-6 md:col-span-6 p-3">
+        <label for="class">URL Logo</label>
+        <input formControlName="logoUrl" [appShowErrors]="agenciaForm.get('logoUrl')" type="text" class="w-full" pInputText />
+    </div>
+</div>
