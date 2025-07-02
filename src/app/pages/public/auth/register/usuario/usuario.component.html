@@ -1,66 +1,90 @@
-
 <div class="grid grid-cols-12" [formGroup]="usuarioForm">
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Nombres</label>
-        <input formControlName="nombres" [appShowErrors]="usuarioForm.get('nombres')" type="text" class="w-full" pInputText />
+        <input formControlName="nombres" [appShowErrors]="usuarioForm.get('nombres')" type="text" class="w-full"
+            pInputText />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Primer Apellido</label>
-        <input formControlName="primerApellido" [appShowErrors]="usuarioForm.get('primerApellido')" type="text" class="w-full" pInputText />
+        <input formControlName="primerApellido" [appShowErrors]="usuarioForm.get('primerApellido')" type="text"
+            class="w-full" pInputText />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Segundo Apellido</label>
-        <input formControlName="segundoApellido" [appShowErrors]="usuarioForm.get('segundoApellido')" type="text" class="w-full" pInputText />
+        <input formControlName="segundoApellido" [appShowErrors]="usuarioForm.get('segundoApellido')" type="text"
+            class="w-full" pInputText />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Correo</label>
-        <input formControlName="correo" [appShowErrors]="usuarioForm.get('correo')" type="text" class="w-full" pInputText />
+        <input formControlName="correo" [appShowErrors]="usuarioForm.get('correo')" type="text" class="w-full"
+            pInputText />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Celular</label>
-        <input formControlName="celularUno" [appShowErrors]="usuarioForm.get('celularUno')" type="text" class="w-full" pInputText />
+        <input formControlName="celularUno" [appShowErrors]="usuarioForm.get('celularUno')" type="text" class="w-full"
+            pInputText />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Celular 2</label>
-        <input formControlName="celularDos" [appShowErrors]="usuarioForm.get('celularDos')" type="text" class="w-full" pInputText />
+        <input formControlName="celularDos" [appShowErrors]="usuarioForm.get('celularDos')" type="text" class="w-full"
+            pInputText />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Tipo Doc. Identidad</label>
-        <input formControlName="idDocumentoIdentidad" [appShowErrors]="usuarioForm.get('idDocumentoIdentidad')" type="text" class="w-full" pInputText />
+        <p-select [appShowErrors]="usuarioForm.get('idDocumentoIdentidad')" [options]="documentosIdentidad"
+            formControlName="idDocumentoIdentidad" [showClear]="true" [filter]="true" filterBy="nombre"
+            (onChange)="onDocumentoIdentidadChange($event)" optionLabel="nombre" optionValue="id"
+            placeholder="Selecciona un distrito" class="w-full" />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Num. Doc. Identidad</label>
-        <input formControlName="numeroDocumento" [appShowErrors]="usuarioForm.get('numeroDocumento')" type="text" class="w-full" pInputText />
+        <input formControlName="numeroDocumento" [appShowErrors]="usuarioForm.get('numeroDocumento')" type="text"
+            class="w-full" pInputText />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Fecha Nacimiento</label>
-        <input formControlName="fechaNacimiento" [appShowErrors]="usuarioForm.get('fechaNacimiento')" type="text" class="w-full" pInputText />
+        <p-datepicker formControlName="fechaNacimiento" dateFormat="dd-mm-yy"
+            [appShowErrors]="usuarioForm.get('fechaNacimiento')" [iconDisplay]="'input'" [showIcon]="true"
+            inputId="icondisplay" styleClass="w-full" />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">País Nacimiento</label>
-        <input formControlName="codigoNacionalidad" [appShowErrors]="usuarioForm.get('codigoNacionalidad')" type="text" class="w-full" pInputText />
+        <p-select [appShowErrors]="usuarioForm.get('codigoNacionalidad')" [options]="paises"
+            formControlName="codigoNacionalidad" [showClear]="true" [filter]="true" filterBy="nombre"
+            optionLabel="nombre" optionValue="codigo" (onChange)="onPaisChange($event)" placeholder="Selecciona un país"
+            class="w-full" />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Departamento Nacimiento</label>
-        <input formControlName="codigoDepartamentoNacimiento" [appShowErrors]="usuarioForm.get('codigoDepartamentoNacimiento')" type="text" class="w-full" pInputText />
+        <p-select [appShowErrors]="usuarioForm.get('codigoDepartamentoNacimiento')" [options]="departamentos"
+            formControlName="codigoDepartamentoNacimiento" [showClear]="true" [filter]="true" filterBy="nombre"
+            optionLabel="nombre" optionValue="codigo" (onChange)="onDepartamentoChange($event)"
+            placeholder="Selecciona un departamento" class="w-full" />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Provincia Nacimiento</label>
-        <input formControlName="codigoProvinciaNacimiento" [appShowErrors]="usuarioForm.get('codigoProvinciaNacimiento')" type="text" class="w-full" pInputText />
+        <p-select [appShowErrors]="usuarioForm.get('codigoProvinciaNacimiento')" [options]="provincias"
+            formControlName="codigoProvinciaNacimiento" [showClear]="true" [filter]="true" filterBy="nombre"
+            optionLabel="nombre" optionValue="codigo" (onChange)="onProvinciaChange($event)"
+            placeholder="Selecciona una provincia" class="w-full" />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Distrito Nacimiento</label>
-        <input formControlName="codigoDistritoNacimiento" [appShowErrors]="usuarioForm.get('codigoDistritoNacimiento')" type="text" class="w-full" pInputText />
+        <p-select [appShowErrors]="usuarioForm.get('codigoDistritoNacimiento')" [options]="distritos"
+            formControlName="codigoDistritoNacimiento" [showClear]="true" [filter]="true" filterBy="nombre"
+            optionLabel="nombre" optionValue="codigo" placeholder="Selecciona un distrito" class="w-full" />
     </div>
     <div class="col-span-12 p-3">
         <p-divider></p-divider>
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Usuario</label>
-        <input formControlName="usuario" [appShowErrors]="usuarioForm.get('usuario')" type="text" class="w-full" pInputText />
+        <input formControlName="usuario" [appShowErrors]="usuarioForm.get('usuario')" type="text" class="w-full"
+            pInputText />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Contraseña</label>
-        <input formControlName="contrasenia" [appShowErrors]="usuarioForm.get('contrasenia')" type="text" class="w-full" pInputText />
+        <p-password styleClass="w-full" formControlName="contrasenia" [appShowErrors]="usuarioForm.get('contrasenia')"
+            inputStyleClass="w-full" [feedback]="false" placeholder="Contraseña" [toggleMask]="true"></p-password>
     </div>
 </div>

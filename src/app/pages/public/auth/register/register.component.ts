@@ -27,6 +27,15 @@ export class RegisterComponent {
     empresa!: EmpresaRequest;
     agencia!: AgenciaRequest;
     usuario!: UsuarioRequest;
+    get empresaValid(): boolean{
+        return !this.empresaView ? false : this.empresaView.empresaForm.valid;
+    }
+    get agenciaValid(): boolean{
+        return !this.agenciaView ? false : this.agenciaView.agenciaForm.valid;
+    }
+    get usuarioValid(): boolean{
+        return !this.usuarioView ? false : this.usuarioView.usuarioForm.valid;
+    }
     constructor(
         @Inject(Router) public router: Router,
         private registerService: RegisterService,
@@ -37,12 +46,21 @@ export class RegisterComponent {
     onEmpresaSiguienteClick(callback:Function){
         this.empresa = this.empresaView.empresa;
         this.registerService.setEmpresa(this.empresa);
-        callback(2);
+        if(this.empresaValid){
+            callback(2);
+        }else{
+            this.messageService.showWarn("Debe completar los campos obligatorios.")
+        }
+        
     }
     onAgenciaSiguienteClick(callback:Function){
         this.agencia = this.agenciaView.agencia;
         this.registerService.setAgencia(this.agencia);
-        callback(3);
+        if(this.agenciaValid){
+            callback(3);
+        }else{
+            this.messageService.showWarn("Debe completar los campos obligatorios.")
+        }
     }
     onUsuarioAtrasClick(callback:Function){
         this.usuario = this.usuarioView.usuario;
@@ -51,26 +69,31 @@ export class RegisterComponent {
         callback(2);
     }
     onGuardarClick(){
-        this.usuario = this.usuarioView.usuario;
-        let body: RegistroRequest = {
-            empresa: this.empresa,
-            agencia: this.agencia,
-            usuario: this.usuario,
-        }
-        this.registroService.guardar(body).subscribe({
-            next: res => {
-                if(res.success){
-                    this.messageService.showError(res.message)
-                }else{
-                    this.messageService.showSuccess(res.message)
-                }
-                
-            },
-            error: err => {
-                console.error(err)
+        if(this.usuarioValid){
+            this.usuario = this.usuarioView.usuario;
+            let body: RegistroRequest = {
+                empresa: this.empresa,
+                agencia: this.agencia,
+                usuario: this.usuario,
             }
-        })
-        console.info(body)
+            this.registroService.guardar(body).subscribe({
+                next: res => {
+                    if(res.success){
+                        this.messageService.showError(res.message)
+                    }else{
+                        this.messageService.showSuccess(res.message)
+                        this.onRegresarLoginClick();
+                    }
+                    
+                },
+                error: err => {
+                    console.error(err)
+                }
+            })
+            console.info(body)
+        }else{
+            this.messageService.showWarn("Debe completar los campos obligatorios.")
+        }
     }
     onRegresarLoginClick() {
         this.router.navigate(['/auth/login']);

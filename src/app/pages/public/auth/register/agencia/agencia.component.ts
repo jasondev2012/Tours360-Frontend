@@ -23,8 +23,8 @@ export class AgenciaComponent implements OnInit {
                 @Inject(FormBuilder) public fb: FormBuilder,
                 private registerService: RegisterService) {
         this.agenciaForm = this.fb.group({
-            nombreUrl: ['', [ Validators.required]],
-            logoUrl: ['', [ Validators.required]]
+            nombreUrl: ['viajes-picaflor', [ Validators.required]],
+            logoUrl: ['https://www.agencias.viajespicaflor.com/wp-content/uploads/2022/03/favicon-picaflor.png', [ Validators.required]]
         })
     }
     ngOnInit(): void {

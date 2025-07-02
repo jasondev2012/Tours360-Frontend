@@ -2,7 +2,7 @@
 <div class="grid grid-cols-12" [formGroup]="empresaForm">
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">RUC</label>
-        <input formControlName="ruc" [appShowErrors]="empresaForm.get('ruc')" type="text" class="w-full" pInputText />
+        <p-inputmask mask="99999999999" formControlName="ruc" styleClass="w-full" [appShowErrors]="empresaForm.get('ruc')" placeholder="XXXXXXXXXXX" />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Razón Social</label>
@@ -18,15 +18,40 @@
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Departamento</label>
-        <input formControlName="codigoDepartamento" [appShowErrors]="empresaForm.get('codigoDepartamento')" type="text" class="w-full" pInputText />
+        <p-select [appShowErrors]="empresaForm.get('codigoDepartamento')" [options]="departamentos"
+            formControlName="codigoDepartamento"
+            [showClear]="true"
+            [filter]="true"
+            filterBy="nombre"
+            optionLabel="nombre"
+            optionValue="codigo" 
+            (onChange)="onDepartamentoChange($event)"
+            placeholder="Selecciona un departamento"
+            class="w-full" />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Provincia</label>
-        <input formControlName="codigoProvincia" [appShowErrors]="empresaForm.get('codigoProvincia')" type="text" class="w-full" pInputText />
+        <p-select [appShowErrors]="empresaForm.get('codigoProvincia')" [options]="provincias" 
+            formControlName="codigoProvincia"                
+            [showClear]="true"
+            [filter]="true"
+            filterBy="nombre"
+            optionLabel="nombre"
+            optionValue="codigo" 
+            (onChange)="onProvinciaChange($event)"
+            placeholder="Selecciona una provincia" class="w-full" />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Distrito</label>
-        <input formControlName="codigoDistrito" [appShowErrors]="empresaForm.get('codigoDistrito')" type="text" class="w-full" pInputText />
+        <p-select [appShowErrors]="empresaForm.get('codigoDistrito')" [options]="distritos"
+            formControlName="codigoDistrito"
+            [showClear]="true"
+            [filter]="true"
+            filterBy="nombre"
+            optionLabel="nombre"
+            optionValue="codigo" 
+            placeholder="Selecciona un distrito"
+            class="w-full" />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Dirección</label>
@@ -54,6 +79,6 @@
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">DNI Representante Legal</label>
-        <input formControlName="dniRepresentante" [appShowErrors]="empresaForm.get('dniRepresentante')" type="text" class="w-full" pInputText />
+        <p-inputmask mask="99999999" formControlName="dniRepresentante" styleClass="w-full" [appShowErrors]="empresaForm.get('dniRepresentante')" placeholder="XXXXXXXX" />
     </div>
 </div>

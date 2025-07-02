@@ -17,9 +17,9 @@ export class CustomMessageService {
         detail: message
     });
   }
-  showWarn(message: string, summary = "Ok") {    
+  showWarn(message: string, summary = "Validación") {    
     this.messageService.add({
-        severity: 'success',
+        severity: 'warn',
         summary: summary,
         detail: message
     });
