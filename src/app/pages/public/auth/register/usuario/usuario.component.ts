@@ -52,17 +52,17 @@ export class UsuarioComponent {
             nombres: ['JASON JOSEPH', [ Validators.required]],
             primerApellido: ['GUTIERREZ', [ Validators.required]],
             segundoApellido: ['CUADROS'],
-            correo: ['jason.gutierrez.dev@gmail.com', [Validators.required]],
+            correo: ['jason.gutierrez.dev@gmail.com', [Validators.required, Validators.email]],
             celularUno: ['922111007', [Validators.required]],
             celularDos: ['919707333'],
             idDocumentoIdentidad: [1, [Validators.required]],
             numeroDocumento: ['74390363', [Validators.required]],
-            fechaNacimiento: [new Date(2025,11,30), [Validators.required]],
+            fechaNacimiento: [new Date(1995,10,30), [Validators.required]],
             codigoDepartamentoNacimiento: [{ value: null, disabled: true }],
             codigoProvinciaNacimiento: [{ value: null, disabled: true }],
             codigoDistritoNacimiento: [{ value: null, disabled: true }],
             codigoNacionalidad: ['', [Validators.required]],
-            usuario: ['jason.gutierrez.dev@gmail.com', [Validators.required]],
+            usuario: ['jason.gutierrez.dev@gmail.com', [Validators.required, Validators.email]],
             contrasenia: ['123456', [Validators.required]]
         })
     }

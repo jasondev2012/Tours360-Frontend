@@ -9,6 +9,7 @@ export interface SessionResponse {
     token: string;
     usuario: string;
     agencia: string;
+    logoAgencia: string;
     expira: Date;
 }
 

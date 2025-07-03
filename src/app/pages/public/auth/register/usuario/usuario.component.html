@@ -78,13 +78,13 @@
         <p-divider></p-divider>
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
-        <label for="class">Usuario</label>
+        <label for="class">Usuario (ejemplo&#64;ejemplo.com)</label>
         <input formControlName="usuario" [appShowErrors]="usuarioForm.get('usuario')" type="text" class="w-full"
             pInputText />
     </div>
     <div class="col-span-12 lg:col-span-4 md:col-span-6 p-3">
         <label for="class">Contraseña</label>
         <p-password styleClass="w-full" formControlName="contrasenia" [appShowErrors]="usuarioForm.get('contrasenia')"
-            inputStyleClass="w-full" [feedback]="false" placeholder="Contraseña" [toggleMask]="true"></p-password>
+            inputStyleClass="w-full" [feedback]="true" placeholder="Contraseña" [toggleMask]="true"></p-password>
     </div>
 </div>

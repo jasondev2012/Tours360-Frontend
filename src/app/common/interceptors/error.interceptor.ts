@@ -42,6 +42,16 @@ export const errorInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next:
           }).then(() => {
             sessionService.endSession(); // 👈 Aquí se ejecuta tu servicio
           });
+        }else{
+          if (error.error?.data && typeof error.error.data === 'object') {
+            const mensajes = Object.values(error.error.data);
+            const mensajeUnico = mensajes.join('\n'); // o '\n' si es texto plano
+            messageService.add({
+              severity: 'error',
+              summary: 'Error (' + error.status + ')',
+              detail: mensajeUnico,
+            });
+          }
         }
         return throwError(() => error);
       }

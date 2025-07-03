@@ -32,4 +32,15 @@ export class AgenciaComponent implements OnInit {
             this.agenciaForm.patchValue(this.registerService.getAgencia())
         }
     }
+    sanitizarNombreUrl(): void {
+        const control = this.agenciaForm.get('nombreUrl');
+        if (!control) return;
+
+        const valorOriginal = control.value || '';
+        const valorSanitizado = valorOriginal.replace(/[^a-zA-Z0-9]/g, '-');
+
+        if (valorOriginal !== valorSanitizado) {
+            control.setValue(valorSanitizado, { emitEvent: false });
+        }
+    }
 }

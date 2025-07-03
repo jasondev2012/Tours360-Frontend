@@ -60,7 +60,6 @@ export class ShowErrorsDirective implements OnInit {
         }
     }
     private updateErrorMessage(control: AbstractControl) {
-        console.log(control)
         if (control.invalid && !control.pristine) {
             const errors = control.errors || {};
             const messages: { [key: string]: string } = {

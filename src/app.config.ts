@@ -45,7 +45,8 @@ export const appConfig: ApplicationConfig = {
                 emptySearchMessage: "No se encontraron resultados",
                 dateFormat: "dd/mm/yyyy",
                 firstDayOfWeek: 1,
-                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+
             },
             theme: { 
                 preset: MyPreset, 
