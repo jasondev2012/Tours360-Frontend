@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
+import { SessionResponse, SessionService } from '../../common/services/sesion.service';
 
 @Component({
     selector: 'app-menu',
@@ -17,7 +18,10 @@ import { AppMenuitem } from './app.menuitem';
 })
 export class AppMenu {
     model: MenuItem[] = [];
-
+    session: SessionResponse;
+    constructor(private sessionService: SessionService){        
+        this.session = this.sessionService.getSession();
+    }
     ngOnInit() {
         this.model = [
             {
@@ -26,43 +30,43 @@ export class AppMenu {
             },
             {
                 label: 'Gestion',
-                routerLink: ['/pages'],
+                routerLink: ['/' + this.session.agencia + '/pages'],
                 items: [
-                    { label: 'Destinos', icon: 'pi pi-fw pi-sparkles', routerLink: ['/pages/gestion/destinos'] },
-                    { label: 'Eventos', icon: 'pi pi-fw pi-ticket', routerLink: ['/pages/gestion/eventos'] },
-                    { label: 'Puntos Recojo/Bajada', icon: 'pi pi-fw pi-map-marker', routerLink: ['/pages/gestion/puntos-paradas'] },
-                    { label: 'Participantes', icon: 'pi pi-fw pi-users', routerLink: ['/pages/gestion/participantes'] },
+                    { label: 'Destinos', icon: 'pi pi-fw pi-sparkles', routerLink: ['/' + this.session.agencia + '/pages/gestion/destinos'] },
+                    { label: 'Eventos', icon: 'pi pi-fw pi-ticket', routerLink: ['/' + this.session.agencia + '/pages/gestion/eventos'] },
+                    { label: 'Puntos Recojo/Bajada', icon: 'pi pi-fw pi-map-marker', routerLink: ['/' + this.session.agencia + '/pages/gestion/puntos-paradas'] },
+                    { label: 'Participantes', icon: 'pi pi-fw pi-users', routerLink: ['/' + this.session.agencia + '/pages/gestion/participantes'] },
                 ]
             },
             {
                 label: 'UI Components',
                 items: [
-                    { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
-                    { label: 'Button', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon', routerLink: ['/uikit/button'] },
-                    { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
-                    { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
-                    { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
-                    { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
-                    { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'] },
-                    { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'] },
-                    { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'] },
-                    { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'] },
-                    { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
-                    { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
-                    { label: 'Timeline', icon: 'pi pi-fw pi-calendar', routerLink: ['/uikit/timeline'] },
-                    { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
+                    { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/' + this.session.agencia +'/uikit/formlayout'] },
+                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/' + this.session.agencia +'/uikit/input'] },
+                    { label: 'Button', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon', routerLink: ['/' + this.session.agencia +'/uikit/button'] },
+                    { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/' + this.session.agencia +'/uikit/table'] },
+                    { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/' + this.session.agencia +'/uikit/list'] },
+                    { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/' + this.session.agencia +'/uikit/tree'] },
+                    { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/' + this.session.agencia +'/uikit/panel'] },
+                    { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/' + this.session.agencia +'/uikit/overlay'] },
+                    { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/' + this.session.agencia +'/uikit/media'] },
+                    { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/' + this.session.agencia +'/uikit/menu'] },
+                    { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/' + this.session.agencia +'/uikit/message'] },
+                    { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/' + this.session.agencia +'/uikit/file'] },
+                    { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/' + this.session.agencia +'/uikit/charts'] },
+                    { label: 'Timeline', icon: 'pi pi-fw pi-calendar', routerLink: ['/' + this.session.agencia +'/uikit/timeline'] },
+                    { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/' + this.session.agencia +'/uikit/misc'] }
                 ]
             },
             {
                 label: 'Pages',
                 icon: 'pi pi-fw pi-briefcase',
-                routerLink: ['/pages'],
+                routerLink: ['/' + this.session.agencia + '/pages'],
                 items: [
                     {
                         label: 'Landing',
                         icon: 'pi pi-fw pi-globe',
-                        routerLink: ['/landing']
+                        routerLink: ['/' + this.session.agencia +'/landing']
                     },
                     {
                         label: 'Auth',
@@ -88,17 +92,17 @@ export class AppMenu {
                     {
                         label: 'Crud',
                         icon: 'pi pi-fw pi-pencil',
-                        routerLink: ['/pages/crud']
+                        routerLink: ['/' + this.session.agencia + '/pages/crud']
                     },
                     {
                         label: 'Not Found',
                         icon: 'pi pi-fw pi-exclamation-circle',
-                        routerLink: ['/pages/notfound']
+                        routerLink: ['/' + this.session.agencia + '/pages/notfound']
                     },
                     {
                         label: 'Empty',
                         icon: 'pi pi-fw pi-circle-off',
-                        routerLink: ['/pages/empty']
+                        routerLink: ['/' + this.session.agencia + '/pages/empty']
                     }
                 ]
             },

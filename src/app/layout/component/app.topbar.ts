@@ -78,7 +78,6 @@ export class AppTopbar {
 
     constructor(public layoutService: LayoutService, private sessionService: SessionService) {
         this.session = this.sessionService.getSession();
-        console.info(this.session)
     }
 
     togglePopover(event: any) {

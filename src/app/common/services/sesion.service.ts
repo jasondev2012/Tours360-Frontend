@@ -35,8 +35,16 @@ export class SessionService {
     }
 
     getSession() {
-        const session = localStorage.getItem(this.sessionKey);
-        return session ? JSON.parse(session) : null;
+        //const session = localStorage.getItem(this.sessionKey);
+        let session: SessionResponse = {
+            token: "aaaaa",
+            fullname: "JASON JOSEPH GUTIERREZ CUADROS",
+            usuario: "jason.gutierrez.dev@gmail.com",
+            agencia: "@DEMO",
+            logoAgencia: "",
+            expira: new Date()
+        }
+        return session // session ? JSON.parse(session) : null;
     }
 
     clearSession() {
