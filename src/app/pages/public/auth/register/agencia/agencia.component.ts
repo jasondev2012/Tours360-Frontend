@@ -16,6 +16,7 @@ import { RegisterService } from '../../../../service/registro.service';
 })
 export class AgenciaComponent implements OnInit {
     public agenciaForm: FormGroup;
+    previewUrl: string | null = null;
     get agencia():AgenciaRequest{
         return this.agenciaForm.getRawValue() as AgenciaRequest;
     }
@@ -24,11 +25,23 @@ export class AgenciaComponent implements OnInit {
                 private registerService: RegisterService) {
         this.agenciaForm = this.fb.group({
             nombreUrl: ['viajes-picaflor', [ Validators.required]],
-            logoUrl: ['https://www.agencias.viajespicaflor.com/wp-content/uploads/2022/03/favicon-picaflor.png', [ Validators.required]]
+            logo: ['', [ Validators.required]]
         })
     }
     ngOnInit(): void {
-        if(this.registerService.getAgencia()){
+        let agencia = this.registerService.getAgencia()
+        if(agencia){
+            if(agencia.logo){
+                const file = agencia.logo;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    this.previewUrl = reader.result as string;
+
+                    // También puedes guardar el archivo en el form si quieres
+                    this.agenciaForm.get('logo')?.setValue(file);
+                };
+                reader.readAsDataURL(file);
+            }
             this.agenciaForm.patchValue(this.registerService.getAgencia())
         }
     }
@@ -41,6 +54,20 @@ export class AgenciaComponent implements OnInit {
 
         if (valorOriginal !== valorSanitizado) {
             control.setValue(valorSanitizado, { emitEvent: false });
+        }
+    }
+    onLogoSelected(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files.length > 0) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                this.previewUrl = reader.result as string;
+
+                // También puedes guardar el archivo en el form si quieres
+                this.agenciaForm.get('logo')?.setValue(file);
+            };
+            reader.readAsDataURL(file);
         }
     }
 }

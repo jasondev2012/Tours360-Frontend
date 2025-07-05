@@ -18,6 +18,12 @@ export class RegistroService {
     }
 
     guardar(request: RegistroRequest): Observable<ICustomDataResponse<string>>{
+        
         return this.http.post<ICustomDataResponse<string>>(`${this.api}auth/registro`, request)
     }
+    
+    guardarLogo(formData: FormData): Observable<ICustomDataResponse<string>> {
+        return this.http.post<ICustomDataResponse<string>>(`${this.api}auth/registro-logo`, formData);
+    }
+
 }

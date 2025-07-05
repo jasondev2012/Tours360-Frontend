@@ -1,11 +1,24 @@
-
 <div class="grid grid-cols-12" [formGroup]="agenciaForm">
-    <div class="col-span-12 lg:col-span-6 md:col-span-6 p-3">
-        <label for="class">URL Nombre (https://tours360.pe/<b>{{agenciaForm.get('nombreUrl')?.value}}</b>)</label>
-        <input formControlName="nombreUrl" [appShowErrors]="agenciaForm.get('nombreUrl')" (input)="sanitizarNombreUrl()" type="text" class="w-full" pInputText />
+    <div class="col-span-12 p-3 flex flex-col items-center gap-3">
+        <label for="logoUpload" class="block w-full text-center">URL Logo</label>
+
+        <!-- Área de drop / preview -->
+        <div (click)="fileInput?.click()"
+            class="cursor-pointer border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 font-medium flex items-center justify-center"
+            style="height: 200px; width: 200px;">
+            <img *ngIf="previewUrl; else placeholder" [src]="previewUrl" alt="Logo Preview"
+                class="object-contain h-full w-full rounded" />
+            <ng-template #placeholder>
+                <span class="text-sm text-surface-500 text-center px-2">Haz clic para subir logo</span>
+            </ng-template>
+        </div>
+
+        <!-- Input oculto -->
+        <input #fileInput type="file" accept="image/*" hidden (change)="onLogoSelected($event)" />
     </div>
-    <div class="col-span-12 lg:col-span-6 md:col-span-6 p-3">
-        <label for="class">URL Logo</label>
-        <input formControlName="logoUrl" [appShowErrors]="agenciaForm.get('logoUrl')" type="text" class="w-full" pInputText />
+    <div class="col-span-12 p-3">
+        <label for="class">URL Nombre (https://tours360.pe/<b>{{agenciaForm.get('nombreUrl')?.value}}</b>)</label>
+        <input formControlName="nombreUrl" [appShowErrors]="agenciaForm.get('nombreUrl')" (input)="sanitizarNombreUrl()"
+            type="text" class="w-full" pInputText />
     </div>
 </div>

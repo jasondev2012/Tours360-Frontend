@@ -19,7 +19,7 @@ import { SessionResponse, SessionService } from '../../common/services/sesion.se
                     <i class="pi pi-bars"></i>
                 </button>
                 <a class="layout-topbar-logo" routerLink="/">
-                    <img [src]="session.logoAgencia" crossorigin="anonymous" loading="lazy" />
+                    <img [src]="session.logoAgencia" style="max-width: 50px;" crossorigin="anonymous" loading="lazy" />
                     <span>{{session.agencia}}</span>
                 </a>
             </div>

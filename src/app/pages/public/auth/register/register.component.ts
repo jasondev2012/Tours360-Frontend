@@ -78,10 +78,20 @@ export class RegisterComponent {
             }
             this.registroService.guardar(body).subscribe({
                 next: res => {
-                    if(res.success){
-                        this.messageService.showError(res.message)
+                    if(!res.success){
+                        this.messageService.showError(res.message);
                     }else{
                         this.messageService.showSuccess(res.message)
+                        const formData = new FormData();
+                        formData.append('idAgencia', res.data);
+                        formData.append('logo', this.agencia.logo); // archivo (File)
+                        this.registroService.guardarLogo(formData).subscribe({
+                            next: resLogo => {
+                                if(!resLogo.success){
+                                    this.messageService.showSuccess(resLogo.message);
+                                }
+                            }
+                        })
                         this.onRegresarLoginClick();
                     }
                     
