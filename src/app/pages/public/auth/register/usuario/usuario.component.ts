@@ -6,7 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ShowErrorsDirective } from '../../../../../common/directives/show-errors.directive';
 import { DividerModule } from 'primeng/divider';
 import { UsuarioRequest } from '../../../../../interfaces/seguridad/usuario.interface';
-import { RegisterService } from '../../../../service/registro.service';
+import { RegisterService } from '../../../service/registro.service';
 import { CatalogoService } from '../../../../../services/catalogo/catalogo.service';
 import { ICatalogoGenerico } from '../../../../../interfaces/catalogo/catalogo.interface';
 import { TipoCatalogo } from '../../../../../common/enums/tipo_catalogo.enum';
@@ -112,7 +112,7 @@ export class UsuarioComponent {
         this.provincias = [];
         this.distritos = [];
         if (event && event.value) {
-            this.catalogoService.listar(TipoCatalogo.PROVINCIAS, event.value).subscribe({
+            this.catalogoService.authListar(TipoCatalogo.PROVINCIAS, event.value).subscribe({
                 next: (res) => {
                     if (res.success) {
                         this.provincias = res.data;
@@ -123,7 +123,7 @@ export class UsuarioComponent {
     }
     onProvinciaChange(event: any) {
         if (event && event.value) {
-            this.catalogoService.listar(TipoCatalogo.DISTRITOS, event.value).subscribe({
+            this.catalogoService.authListar(TipoCatalogo.DISTRITOS, event.value).subscribe({
                 next: (res) => {
                     if (res.success) {
                         this.distritos = res.data;
@@ -157,21 +157,21 @@ export class UsuarioComponent {
         this.usuarioForm.get(componente)?.updateValueAndValidity()
     }
     obtenerCatalogosIniciales() {
-        this.catalogoService.listar(TipoCatalogo.PAIS).subscribe({
+        this.catalogoService.authListar(TipoCatalogo.PAIS).subscribe({
             next: (res) => {
                 if (res.success) {
                     this.paises = res.data;
                 }
             }
         });
-        this.catalogoService.listar(TipoCatalogo.DOCUMENTOS_IDENTIDAD).subscribe({
+        this.catalogoService.authListar(TipoCatalogo.DOCUMENTOS_IDENTIDAD).subscribe({
             next: (res) => {
                 if (res.success) {
                     this.documentosIdentidad = res.data;
                 }
             }
         });
-        this.catalogoService.listar(TipoCatalogo.DEPARTAMENTOS).subscribe({
+        this.catalogoService.authListar(TipoCatalogo.DEPARTAMENTOS).subscribe({
             next: (res) => {
                 if (res.success) {
                     this.departamentos = res.data;

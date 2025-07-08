@@ -6,21 +6,22 @@ import { LoginRequest } from '../../interfaces/auth/login.interface';
 import { ICustomDataResponse } from '../../common/interfaces/custom-response.interface';
 import { SessionResponse } from '../../common/services/sesion.service';
 import { ICatalogoGenerico } from '../../interfaces/catalogo/catalogo.interface';
+import { IDestinoListResponse, IDestinoRequest } from '../../interfaces/gestion/destino.interface';
 
 @Injectable({
     providedIn: 'root'
   })
-export class CatalogoService {
+export class DestinoService {
     api: string = '';
     constructor(private http: HttpClient,
     ) {
-        this.api = environment.api
+        this.api = environment.api + 'destino/'
     }
 
-    authListar(catalogo: string, padre: string = "0"): Observable<ICustomDataResponse<ICatalogoGenerico[]>>{
-        return this.http.get<ICustomDataResponse<ICatalogoGenerico[]>>(`${this.api}catalogo/auth-listar?catalogo=${catalogo}&padre=${padre}`)
+    registrar(request: IDestinoRequest): Observable<ICustomDataResponse<number>>{
+        return this.http.post<ICustomDataResponse<number>>(`${this.api}registrar`, request)
     }
-    listar(catalogo: string, padre: string = "0"): Observable<ICustomDataResponse<ICatalogoGenerico[]>>{
-        return this.http.get<ICustomDataResponse<ICatalogoGenerico[]>>(`${this.api}catalogo/listar?catalogo=${catalogo}&padre=${padre}`)
+    listar(): Observable<ICustomDataResponse<IDestinoListResponse[]>>{
+        return this.http.get<ICustomDataResponse<IDestinoListResponse[]>>(`${this.api}listar`)
     }
 }

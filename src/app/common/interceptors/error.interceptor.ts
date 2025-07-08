@@ -33,6 +33,7 @@ export const errorInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next:
         }
       },
       error: (error: HttpErrorResponse) => {
+        console.log(error)
         if (error.status === 401) {
           Swal.fire({
             title: 'Ups!',
@@ -50,6 +51,12 @@ export const errorInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next:
               severity: 'error',
               summary: 'Error (' + error.status + ')',
               detail: mensajeUnico,
+            });
+          }else{
+            messageService.add({
+              severity: 'error',
+              summary: 'Ups!',
+              detail: 'No logramos comunicarnos con nuestro servidor. Actualice y vuelva a intentar.',
             });
           }
         }

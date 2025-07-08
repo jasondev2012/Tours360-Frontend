@@ -1,1 +1,135 @@
-<p>destino-form works!</p>
+<div class="card p-0" style="padding: 0;">
+    <p-breadcrumb [model]="items" [home]="home" />
+</div>
+<div class="card">
+    <div class="grid grid-cols-12" [formGroup]="destinoForm">
+        <div class="col-span-12 p-3">
+            <h3>Datos Generales</h3>
+            <p-divider />
+        </div>
+        <div class="col-span-12 md:col-span-6 p-3 ">
+            <label for="class">Título</label>
+            <input formControlName="titulo" [appShowErrors]="destinoForm.get('titulo')" type="text" class="w-full"
+                pInputText />
+        </div>
+        <div class="col-span-12 md:col-span-6 p-3">
+            <label for="class">Subtítulo</label>
+            <input formControlName="subtitulo" type="text" class="w-full" pInputText />
+        </div>
+        <div class="col-span-12 p-3">
+            <label for="class">Descripción</label>
+            <p-editor formControlName="descripcion" [style]="{ height: 'auto' }"
+                [appShowErrors]="destinoForm.get('descripcion')">
+                <ng-template #header>
+                    <span class="ql-formats">
+                        <button type="button" class="ql-bold" aria-label="Bold"></button>
+                        <button type="button" class="ql-italic" aria-label="Italic"></button>
+                        <button type="button" class="ql-underline" aria-label="Underline"></button>
+                    </span>
+                </ng-template>
+            </p-editor>
+        </div>
+        <div class="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 p-3">
+            <label for="class">Categoria</label>
+            <p-select [appShowErrors]="destinoForm.get('idCategoria')" [options]="categoria"
+                formControlName="idCategoria" [showClear]="true" [filter]="true" filterBy="nombre" optionLabel="nombre"
+                optionValue="id" placeholder="Selecciona una categoría" class="w-full" />
+        </div>
+        <div class="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 p-3">
+            <label for="class">Nivel de exigencia</label>
+            <p-select [appShowErrors]="destinoForm.get('idNivelExigencia')" [options]="nivelExigencia"
+                formControlName="idNivelExigencia" [showClear]="true" [filter]="true" filterBy="nombre"
+                optionLabel="nombre" optionValue="id" placeholder="Selecciona un nivel de exigencia"
+                class="w-full" />
+        </div>
+        <div class="col-span-12 p-3">
+            <h3>Precios</h3>
+            <p-divider />
+        </div>
+        <div class="col-span-12 md:col-span-6 lg:col-span-3 p-3">
+            <label for="class">Precio Base Soles</label>
+            <p-inputNumber formControlName="precioBaseSoles" [appShowErrors]="destinoForm.get('precioBaseSoles')"
+                mode="currency" [maxFractionDigits]="2" [minFractionDigits]="2" [max]="9999999999.99" currency="PEN"
+                locale="es-PE" styleClass="w-full" />
+        </div>
+        <div class="col-span-12 md:col-span-6 lg:col-span-3 p-3">
+            <label for="class">Precio Venta Soles</label>
+            <p-inputNumber formControlName="precioVentaSoles" [appShowErrors]="destinoForm.get('precioVentaSoles')"
+                mode="currency" [maxFractionDigits]="2" [minFractionDigits]="2" [max]="9999999999.99" currency="PEN"
+                locale="es-PE" styleClass="w-full" />
+        </div>
+        <div class="col-span-12 md:col-span-6 lg:col-span-3 p-3">
+            <label for="class">Precio Base Dolares</label>
+            <p-inputNumber formControlName="precioBaseDolares" [appShowErrors]="destinoForm.get('precioBaseDolares')"
+                mode="currency" [maxFractionDigits]="2" [minFractionDigits]="2" [max]="9999999999.99" currency="USD"
+                locale="en-US" styleClass="w-full" />
+        </div>
+        <div class="col-span-12 md:col-span-6 lg:col-span-3 p-3">
+            <label for="class">Precio Venta Dolares</label>
+            <p-inputNumber formControlName="precioVentaDolares" [appShowErrors]="destinoForm.get('precioVentaDolares')"
+                mode="currency" [maxFractionDigits]="2" [minFractionDigits]="2" [max]="9999999999.99" currency="USD"
+                locale="en-US" styleClass="w-full" />
+        </div>
+
+        <div class="col-span-12 p-3">
+            <h3>Datos de Ubicación</h3>
+            <p-divider />
+        </div>
+        <div class="col-span-12 md:col-span-6 lg:col-span-4 p-3">
+            <label for="class">Departamento</label>
+            <p-select [appShowErrors]="destinoForm.get('codigoDepartamento')" [options]="departamentos"
+                formControlName="codigoDepartamento" [showClear]="true" [filter]="true" filterBy="nombre" optionLabel="nombre"
+                optionValue="codigo" (onChange)="onDepartamentoChange($event)" placeholder="Selecciona un departamento"
+                class="w-full" />
+        </div>
+        <div class="col-span-12 md:col-span-6 lg:col-span-4 p-3">
+            <label for="class">Provincia</label>
+            <p-select [appShowErrors]="destinoForm.get('codigoProvincia')" [options]="provincias" formControlName="codigoProvincia"
+                [showClear]="true" [filter]="true" filterBy="nombre" optionLabel="nombre" optionValue="codigo"
+                (onChange)="onProvinciaChange($event)" placeholder="Selecciona una provincia" class="w-full" />
+        </div>
+        <div class="col-span-12 md:col-span-6 lg:col-span-4 p-3">
+            <label for="class">Distrito</label>
+            <p-select [appShowErrors]="destinoForm.get('codigoDistrito')" [options]="distritos" formControlName="codigoDistrito"
+                [showClear]="true" [filter]="true" filterBy="nombre" optionLabel="nombre" optionValue="codigo"
+                placeholder="Selecciona un distrito" class="w-full" />
+        </div>
+        <div class="col-span-12 p-3">
+            <h3>Imágenes <small>(total max. 3MB)</small></h3>
+            <p-divider />
+        </div>
+        <div class="col-span-12 p-3">
+            <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php"
+                (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="3000000" mode="advanced"
+                [showUploadButton]="false" (onSelect)="onFileSelect($event)" chooseLabel="Escoger imágnes"
+                cancelLabel="Cancelar"
+                invalidFileTypeMessageDetail="Solo puede subir imágenes y máximo de 3MB por destino">
+                <ng-template #empty>
+                    <div>Suelte imágenes o escoja alguno.</div>
+                </ng-template>
+            </p-fileupload>
+        </div>
+        <div class="p-3 border-t bg-white col-span-full flex justify-end" style="position: sticky; bottom: 0;">
+            <button pButton severity="danger" class="mr-2" (click)="onCancelarClick()">
+                <i class="pi pi-times" pButtonIcon></i>
+                <span pButtonLabel>Cancelar</span>
+            </button>
+            <button pButton (click)="onGuardarClick()">
+                <i class="pi pi-check" pButtonIcon></i>
+                <span pButtonLabel>Guardar</span>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- En tu componente HTML
+<input type="file" (change)="fileChangeEvent($event)" />
+<image-cropper
+  [imageChangedEvent]="imageChangedEvent"
+  [maintainAspectRatio]="true"
+  [aspectRatio]="4 / 3"
+  format="png"
+  style="display: block; width: 250px"
+  (imageCropped)="imageCropped($event)"
+></image-cropper>
+
+<img [src]="croppedImage" *ngIf="croppedImage" /> -->

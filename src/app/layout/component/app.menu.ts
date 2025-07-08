@@ -26,16 +26,16 @@ export class AppMenu {
         this.model = [
             {
                 label: 'Home',
-                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/' + this.session.agencia + '/'] }]
+                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/' + this.session.agencia + '/dashboard'] }]
             },
             {
                 label: 'Gestion',
                 routerLink: ['/' + this.session.agencia + '/pages'],
                 items: [
-                    { label: 'Destinos', icon: 'pi pi-fw pi-sparkles', routerLink: ['/' + this.session.agencia + '/pages/gestion/destinos'] },
-                    { label: 'Eventos', icon: 'pi pi-fw pi-ticket', routerLink: ['/' + this.session.agencia + '/pages/gestion/eventos'] },
-                    { label: 'Puntos Recojo/Bajada', icon: 'pi pi-fw pi-map-marker', routerLink: ['/' + this.session.agencia + '/pages/gestion/puntos-paradas'] },
-                    { label: 'Participantes', icon: 'pi pi-fw pi-users', routerLink: ['/' + this.session.agencia + '/pages/gestion/participantes'] },
+                    { label: 'Destinos', icon: 'pi pi-fw pi-sparkles', routerLink: ['/' + this.session.agencia + '/gestion/destinos'], routerLinkActiveOptions: { exact: false } },
+                    { label: 'Eventos', icon: 'pi pi-fw pi-ticket', routerLink: ['/' + this.session.agencia + '/gestion/eventos'] },
+                    { label: 'Puntos Recojo/Bajada', icon: 'pi pi-fw pi-map-marker', routerLink: ['/' + this.session.agencia + '/gestion/puntos-paradas'] },
+                    { label: 'Participantes', icon: 'pi pi-fw pi-users', routerLink: ['/' + this.session.agencia + '/gestion/participantes'] },
                 ]
             },
             {
@@ -92,17 +92,17 @@ export class AppMenu {
                     {
                         label: 'Crud',
                         icon: 'pi pi-fw pi-pencil',
-                        routerLink: ['/' + this.session.agencia + '/pages/crud']
+                        routerLink: ['/' + this.session.agencia + '/crud']
                     },
                     {
                         label: 'Not Found',
                         icon: 'pi pi-fw pi-exclamation-circle',
-                        routerLink: ['/' + this.session.agencia + '/pages/notfound']
+                        routerLink: ['/' + this.session.agencia + '/notfound']
                     },
                     {
                         label: 'Empty',
                         icon: 'pi pi-fw pi-circle-off',
-                        routerLink: ['/' + this.session.agencia + '/pages/empty']
+                        routerLink: ['/' + this.session.agencia + '/empty']
                     }
                 ]
             },

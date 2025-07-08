@@ -23,7 +23,7 @@ import { LoginRequest } from '../../../../interfaces/auth/login.interface';
 })
 export class LoginComponent implements OnInit {
     recordarEmail: boolean = false;
-
+    loading: boolean = false;
     contrasenia: string = '123456';
     usuario: string = 'jason.gutierrez.dev@gmail.com';
 
@@ -74,10 +74,13 @@ export class LoginComponent implements OnInit {
             });
             return;
         }
-
+        this.loading = true;
         this.loadingService.show();
         this.loginService.getLogin(request)
-        .pipe(finalize(() => this.loadingService.hide()))
+        .pipe(finalize(() => {
+            //this.loadingService.hide()
+            this.loading = false;
+        }))
         .subscribe({
             next: (res) => {
                 if (this.recordarEmail) {
@@ -92,7 +95,7 @@ export class LoginComponent implements OnInit {
                 }
                 if(res.success){
                     this.sessionService.setSession(res.data);
-                    this.router.navigate([res.data.agencia + '/']); // Redirige al home
+                    this.router.navigate([res.data.agencia + '/dashboard']); // Redirige al home
                 }else{
                     this.messageService.add({
                         severity: 'warn',

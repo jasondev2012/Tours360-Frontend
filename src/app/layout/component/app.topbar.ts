@@ -18,7 +18,7 @@ import { SessionResponse, SessionService } from '../../common/services/sesion.se
                 <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
                     <i class="pi pi-bars"></i>
                 </button>
-                <a class="layout-topbar-logo" routerLink="/">
+                <a class="layout-topbar-logo" routerLink="/{{session.agencia}}/dashboard">
                     <img [src]="session.logoAgencia" style="max-width: 50px;" crossorigin="anonymous" loading="lazy" />
                     <span>{{session.agencia}}</span>
                 </a>

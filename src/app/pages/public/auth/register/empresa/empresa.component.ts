@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { ShowErrorsDirective } from '../../../../../common/directives/show-errors.directive';
 import { EmpresaRequest } from '../../../../../interfaces/seguridad/empresa.interface';
-import { RegisterService } from '../../../../service/registro.service';
+import { RegisterService } from '../../../service/registro.service';
 import { ICatalogoGenerico } from '../../../../../interfaces/catalogo/catalogo.interface';
 import { CatalogoService } from '../../../../../services/catalogo/catalogo.service';
 import { TipoCatalogo } from '../../../../../common/enums/tipo_catalogo.enum';
@@ -64,7 +64,7 @@ export class EmpresaComponent implements OnInit {
         }
     }
     obtenerCatalogosIniciales() {
-        this.catalogoService.listar(TipoCatalogo.DEPARTAMENTOS).subscribe({
+        this.catalogoService.authListar(TipoCatalogo.DEPARTAMENTOS).subscribe({
             next: (res) => {
                 if (res.success) {
                     this.departamentos = res.data;
@@ -76,7 +76,7 @@ export class EmpresaComponent implements OnInit {
         this.provincias = [];
         this.distritos = [];
         if (event && event.value) {
-            this.catalogoService.listar(TipoCatalogo.PROVINCIAS, event.value).subscribe({
+            this.catalogoService.authListar(TipoCatalogo.PROVINCIAS, event.value).subscribe({
                 next: (res) => {
                     if (res.success) {
                         this.provincias = res.data;
@@ -87,7 +87,7 @@ export class EmpresaComponent implements OnInit {
     }
     onProvinciaChange(event: any) {
         if (event && event.value) {
-            this.catalogoService.listar(TipoCatalogo.DISTRITOS, event.value).subscribe({
+            this.catalogoService.authListar(TipoCatalogo.DISTRITOS, event.value).subscribe({
                 next: (res) => {
                     if (res.success) {
                         this.distritos = res.data;

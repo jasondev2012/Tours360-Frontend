@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { EmpresaRequest } from '../../interfaces/seguridad/empresa.interface';
-import { AgenciaRequest } from '../../interfaces/seguridad/agencia.interface';
-import { UsuarioRequest } from '../../interfaces/seguridad/usuario.interface';
+import { AgenciaRequest } from '../../../interfaces/seguridad/agencia.interface';
+import { EmpresaRequest } from '../../../interfaces/seguridad/empresa.interface';
+import { UsuarioRequest } from '../../../interfaces/seguridad/usuario.interface';
 
 
 @Injectable({

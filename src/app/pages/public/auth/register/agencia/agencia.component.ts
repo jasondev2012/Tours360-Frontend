@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { ShowErrorsDirective } from '../../../../../common/directives/show-errors.directive';
 import { AgenciaRequest } from '../../../../../interfaces/seguridad/agencia.interface';
-import { RegisterService } from '../../../../service/registro.service';
+import { RegisterService } from '../../../service/registro.service';
 
 @Component({
   selector: 'app-agencia',

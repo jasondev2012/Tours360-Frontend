@@ -1,1 +1,109 @@
-<p>destino-listar works!</p>
+<div class="card">
+    <p-table
+        #tbl_destinos
+        [value]="destinos"
+        dataKey="id"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [paginator]="true"
+        (onLazyLoad)="listar()"
+        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+        [tableStyle]="{ 'min-width': '75rem' }"
+        sortField="titulo" 
+        [sortOrder]="1"
+        dataKey="id"
+        styleClass="p-datatable-gridlines" 
+    >
+        <ng-template #caption>
+            <div class="flex">
+                <p-button label="Nuevo" (onClick)="onNuevoClick()" icon="pi pi-plus" />
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                     <input pInputText type="text" [(ngModel)]="globalFilter"
+                            (ngModelChange)="tbl_destinos.filterGlobal(globalFilter, 'contains')"
+                            [ngModelOptions]="{standalone: true}" placeholder="Busque alguna palabra..." />
+                </p-iconfield>
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th pSortableColumn="titulo">
+                    Nombre <p-sortIcon field="titulo" />
+                </th>
+                <th >Img. Ref.</th>
+                <th pSortableColumn="eventosAbiertos">
+                    Eventos Abiertos <p-sortIcon field="eventosAbiertos" />
+                </th>
+                <th pSortableColumn="eventosCerrados">
+                    Eventos Cerrados <p-sortIcon field="eventosCerrados" />
+                </th>
+                <th pSortableColumn="precioVentaSoles">
+                    Precio V. (S/) <p-sortIcon field="precioVentaSoles" />
+                </th>
+                <th pSortableColumn="precioVentaDolares">
+                    Precio V. ($/) <p-sortIcon field="precioVentaDolares" />
+                </th>
+                <th>
+                    Estado
+                </th>
+                <th>
+                    Opciones
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-destino>
+            <tr *ngIf="!loading">
+                <td>
+                    {{ destino.titulo }}
+                </td>
+                <td>
+                    <div class="flex items-center gap-2">
+                        <span>{{ destino.imagenReferencia }}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-2">
+                        <span>{{ destino.eventosAbiertos }}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-2">
+                        <span>{{ destino.eventosCerrados }}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-2">
+                        <span>{{ destino.precioVentaSoles }}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-2">
+                        <span>{{ destino.precioVentaDolares }}</span>
+                    </div>
+                </td>
+                <td>
+                    <p-tag [value]="destino.status" [severity]="getSeverity(destino.status)" />
+                </td>
+                <td>
+                </td>
+            </tr>
+            <tr *ngIf="loading">
+                <td><p-skeleton /></td>
+                <td><p-skeleton /></td>
+                <td><p-skeleton /></td>
+                <td><p-skeleton /></td>
+                <td><p-skeleton /></td>
+                <td><p-skeleton /></td>
+                <td><p-skeleton /></td>
+                <td><p-skeleton /></td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="8">Aún no tienes destinos, <a class="underline cursor-pointer text-blue-600" (click)="onNuevoClick()">agrega uno</a>.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

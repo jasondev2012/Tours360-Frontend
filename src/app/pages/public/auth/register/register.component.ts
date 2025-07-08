@@ -7,7 +7,7 @@ import { AgenciaComponent } from "./agencia/agencia.component";
 import { Router } from '@angular/router';
 import { EmpresaRequest } from '../../../../interfaces/seguridad/empresa.interface';
 import { AgenciaRequest } from '../../../../interfaces/seguridad/agencia.interface';
-import { RegisterService } from '../../../service/registro.service';
+import { RegisterService } from '../../service/registro.service';
 import { UsuarioRequest } from '../../../../interfaces/seguridad/usuario.interface';
 import { RegistroRequest } from '../../../../interfaces/auth/registro.intertace';
 import { RegistroService } from '../../../../services/auth/registro.service';
