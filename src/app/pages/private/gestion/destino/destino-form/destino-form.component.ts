@@ -17,12 +17,14 @@ import { ButtonModule } from 'primeng/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { MenuItem } from 'primeng/api';
-import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { IDestinoRequest } from '../../../../../interfaces/gestion/destino.interface';
 import { forkJoin } from 'rxjs';
 import { DestinoService } from '../../../../../services/gestion/destino.service';
+import { TabsModule } from 'primeng/tabs';
+import { FileService } from '../../../../../services/file/file.service';
+import { TipoArchivo } from '../../../../../common/enums/files.enum';
 
-const PRIME_NG = [BreadcrumbModule, ButtonModule, InputTextModule, FileUploadModule, TextareaModule, EditorModule, InputNumber, DividerModule, SelectModule];
+const PRIME_NG = [BreadcrumbModule, ButtonModule, InputTextModule, FileUploadModule, TextareaModule, EditorModule, InputNumber, DividerModule, SelectModule, TabsModule];
 
 @Component({
     selector: 'app-destino-form',
@@ -31,7 +33,7 @@ const PRIME_NG = [BreadcrumbModule, ButtonModule, InputTextModule, FileUploadMod
     styleUrl: './destino-form.component.scss'
 })
 export class DestinoFormComponent {
-    uploadedFiles: any[] = [];
+    imagenes: File[] = [];
     destinoForm: FormGroup;
     departamentos!: ICatalogoGenerico[];
     categoria!: ICatalogoGenerico[];
@@ -42,8 +44,9 @@ export class DestinoFormComponent {
     home: MenuItem | undefined;
     imageChangedEvent: any = '';
     croppedImage: string = '';
+    id: number | null;
     get destino(): IDestinoRequest {
-      return this.destinoForm.getRawValue() as IDestinoRequest
+        return this.destinoForm.getRawValue() as IDestinoRequest;
     }
     constructor(
         private messageService: CustomMessageService,
@@ -51,9 +54,11 @@ export class DestinoFormComponent {
         private router: Router,
         private route: ActivatedRoute,
         private catalogoService: CatalogoService,
-        private destinoService: DestinoService
+        private destinoService: DestinoService,
+        private fileService: FileService
     ) {
-        this.items = [{ label: 'Nuevo' }];
+        this.id = Number(this.route.snapshot.paramMap.get('id')) || null;
+        this.items = [{ label: this.id ? 'Editar' : 'Nuevo' }];
         this.home = {
             icon: 'pi pi-fw pi-sparkles',
             label: 'Destinos',
@@ -64,7 +69,7 @@ export class DestinoFormComponent {
         };
 
         this.destinoForm = this.fb.group({
-            id: [null],
+            id: [this.id],
             titulo: ['', [Validators.required]],
             subtitulo: [''],
             descripcion: ['', [Validators.required]],
@@ -76,32 +81,53 @@ export class DestinoFormComponent {
             precioVentaDolares: [null],
             codigoDepartamento: [null, [Validators.required]],
             codigoProvincia: [null, [Validators.required]],
-            codigoDistrito: [null, [Validators.required]]
+            codigoDistrito: [null, [Validators.required]],
+            itinerario: [''],
+            terminosCondiciones: [''],
+            recomendaciones: [''],
+            incluye: [''],
+            noIncluye: [''],
+            observaciones: ['']
         });
+
+        if (this.id) {
+            this.destinoService.obtener(this.id).subscribe({
+                next: (res) => {
+                    if (res.success) {
+                        this.destinoForm.patchValue(res.data);
+                        if (res.data && res.data.codigoDepartamento) {
+                            this.onDepartamentoChange({ value: res.data.codigoDepartamento });
+                            this.onProvinciaChange({ value: res.data.codigoProvincia || null });
+                        }
+                    } else {
+                        this.messageService.showError(res.message);
+                    }
+                }
+            });
+        }
+
         this.cargarCatalogos();
     }
-    cargarCatalogos(){
+    cargarCatalogos() {
         forkJoin({
-          departamentos: this.catalogoService.listar(TipoCatalogo.DEPARTAMENTOS),
-          categorias: this.catalogoService.listar(TipoCatalogo.CATEGORIA_DESTINO),
-          niveles: this.catalogoService.listar(TipoCatalogo.NIVEL_EXIGENCIA),
+            departamentos: this.catalogoService.listar(TipoCatalogo.DEPARTAMENTOS),
+            categorias: this.catalogoService.listar(TipoCatalogo.CATEGORIA_DESTINO),
+            niveles: this.catalogoService.listar(TipoCatalogo.NIVEL_EXIGENCIA)
         }).subscribe({
-          next: res => {
-              this.departamentos = res.departamentos.data;
-              this.categoria = res.categorias.data;
-              this.nivelExigencia = res.niveles.data;
-          }
-        })
+            next: (res) => {
+                this.departamentos = res.departamentos.data;
+                this.categoria = res.categorias.data;
+                this.nivelExigencia = res.niveles.data;
+            }
+        });
     }
 
     onFileSelect(event: any) {
-        console.log('Archivos seleccionados:', event.files);
+        for (let file of event.files) {
+            this.imagenes.push(file);
+        }
     }
     onUpload(event: UploadEvent) {
-        console.log(event);
-        // for(let file of event.files) {
-        //     this.uploadedFiles.push(file);
-        // }
         this.messageService.showWarn('File Uploaded');
     }
     onDepartamentoChange(event: any) {
@@ -121,21 +147,34 @@ export class DestinoFormComponent {
         this.router.navigate(['../gestion/destinos'], { relativeTo: this.route.parent });
     }
     onGuardarClick() {
-      if(!this.destinoForm.valid){
-        this.messageService.showWarn("Debe completar los datos obligatorios (*)")
-      }else{
-        this.destinoService.registrar(this.destino).subscribe({
-          next: res => {
-            if(res.success){
-              this.messageService.showSuccess(res.message)
-              this.router.navigate(['../gestion/destinos'], { relativeTo: this.route.parent });
-            }else{
-              this.messageService.showError(res.message)
-            }
-          }
-        })
-      }
-      
+        if (!this.destinoForm.valid) {
+            this.messageService.showWarn('Debe completar los datos obligatorios (*)');
+        } else {
+            this.destinoService.registrar(this.destino).subscribe({
+                next: (res) => {
+                    if (res.success) {
+                        if(this.imagenes.length == 0){
+                            this.messageService.showSuccess(res.message);
+                            this.messageService.showInfo("Recuerda que tus destinos deben tener imágenes para que puedas destacar del resto.");
+                            this.router.navigate(['../gestion/destinos'], { relativeTo: this.route.parent });
+                        }else{
+                            this.fileService.registrar(TipoArchivo.IMAGEN_DESTINO, res.data, this.imagenes).subscribe({
+                                next: resImg => {
+                                    if(!resImg.success){
+                                        this.messageService.showInfo(resImg.message);
+                                    }
+                                    this.messageService.showSuccess(res.message);
+                                    this.router.navigate(['../gestion/destinos'], { relativeTo: this.route.parent });
+                                }
+                            })
+                        }
+
+                    } else {
+                        this.messageService.showError(res.message);
+                    }
+                }
+            });
+        }
     }
     onProvinciaChange(event: any) {
         if (event && event.value) {

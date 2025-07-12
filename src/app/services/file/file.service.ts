@@ -12,20 +12,21 @@ import { IFilterRequest, IPaginatedResponse } from '../../interfaces/common/filt
 @Injectable({
     providedIn: 'root'
   })
-export class DestinoService {
+export class FileService {
     api: string = '';
     constructor(private http: HttpClient,
     ) {
-        this.api = environment.api + 'destino/'
+        this.api = environment.api + 'file/'
     }
 
-    obtener(id: number): Observable<ICustomDataResponse<IDestinoRequest>>{
-        return this.http.get<ICustomDataResponse<IDestinoRequest>>(`${this.api}obtener/${id}`)
-    }
-    registrar(request: IDestinoRequest): Observable<ICustomDataResponse<number>>{
-        return this.http.post<ICustomDataResponse<number>>(`${this.api}registrar`, request)
-    }
-    listarPaginado(filter: IFilterRequest): Observable<ICustomDataResponse<IPaginatedResponse<IDestinoListResponse>>>{
-        return this.http.get<ICustomDataResponse<IPaginatedResponse<IDestinoListResponse>>>(`${this.api}listar-paginado?pageIndex=${filter.pageIndex}&pageSize=${filter.pageSize}&filtro=${filter.filtro}&order=${filter.order}&orderDirection=${filter.orderDirection}`)
+    registrar(codigo: string, idDestino: number, files: File[]): Observable<ICustomDataResponse<number>>{
+        const formData = new FormData();
+        formData.append('codigo', codigo);
+        formData.append('idDestino', idDestino.toString());
+
+        files.forEach((file, index) => {
+            formData.append('files', file);
+        });
+        return this.http.post<ICustomDataResponse<number>>(`${this.api}registrar`, formData)
     }
 }

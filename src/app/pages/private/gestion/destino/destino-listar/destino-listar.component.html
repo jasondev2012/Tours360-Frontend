@@ -3,16 +3,20 @@
         #tbl_destinos
         [value]="destinos"
         dataKey="id"
-        [rows]="10"
+        [lazy]="true"
         [rowsPerPageOptions]="[10, 25, 50]"
+        [alwaysShowPaginator]="true"
+        [showCurrentPageReport]="true"
         [paginator]="true"
-        (onLazyLoad)="listar()"
-        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+        (onLazyLoad)="listar($event)"
+        [globalFilterFields]="['titulo', 'precioVentaSoles', 'precioVentaDolares']"
         [tableStyle]="{ 'min-width': '75rem' }"
         sortField="titulo" 
         [sortOrder]="1"
-        dataKey="id"
         styleClass="p-datatable-gridlines" 
+        [totalRecords]="totalRegistros"
+        [rows]="filter.pageSize"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} entradas"
     >
         <ng-template #caption>
             <div class="flex">
@@ -22,7 +26,7 @@
                         <i class="pi pi-search"></i>
                     </p-inputicon>
                      <input pInputText type="text" [(ngModel)]="globalFilter"
-                            (ngModelChange)="tbl_destinos.filterGlobal(globalFilter, 'contains')"
+                            (input)="onGlobalFilter(tbl_destinos, $event)"
                             [ngModelOptions]="{standalone: true}" placeholder="Busque alguna palabra..." />
                 </p-iconfield>
             </div>
@@ -40,10 +44,10 @@
                     Eventos Cerrados <p-sortIcon field="eventosCerrados" />
                 </th>
                 <th pSortableColumn="precioVentaSoles">
-                    Precio V. (S/) <p-sortIcon field="precioVentaSoles" />
+                    Precio V. (PEN) <p-sortIcon field="precioVentaSoles" />
                 </th>
                 <th pSortableColumn="precioVentaDolares">
-                    Precio V. ($/) <p-sortIcon field="precioVentaDolares" />
+                    Precio V. (USD) <p-sortIcon field="precioVentaDolares" />
                 </th>
                 <th>
                     Estado
@@ -60,7 +64,7 @@
                 </td>
                 <td>
                     <div class="flex items-center gap-2">
-                        <span>{{ destino.imagenReferencia }}</span>
+                        <img crossorigin="anonymous" loading="lazy" style="max-width: 50px;" src="{{destino.imagenReferencia}}">
                     </div>
                 </td>
                 <td>
@@ -75,18 +79,20 @@
                 </td>
                 <td>
                     <div class="flex items-center gap-2">
-                        <span>{{ destino.precioVentaSoles }}</span>
+                        <span>{{ destino.precioVentaSoles | currency:'PEN':'symbol':'1.2-2':'es-PE' }}</span>
                     </div>
                 </td>
                 <td>
                     <div class="flex items-center gap-2">
-                        <span>{{ destino.precioVentaDolares }}</span>
+                        <span>{{ destino.precioVentaDolares | currency:'USD':'symbol':'1.2-2':'en-US' }}</span>
                     </div>
                 </td>
                 <td>
-                    <p-tag [value]="destino.status" [severity]="getSeverity(destino.status)" />
+                    <app-estado-tag [estado]="destino.activo"></app-estado-tag>
                 </td>
                 <td>
+                    <p-button (onClick)="onEditarClick(destino.id)" icon="pi pi-pencil" severity="success" class="mr-2" title="Editar" />
+                    <p-button icon="pi pi-trash" severity="danger" title="Eliminar" />
                 </td>
             </tr>
             <tr *ngIf="loading">

@@ -31,4 +31,11 @@ export class CustomMessageService {
         detail: message
     });
   }
+  showInfo(message: string, summary = "Importante!") {    
+    this.messageService.add({
+        severity: 'info',
+        summary: summary,
+        detail: message
+    });
+  }
 }

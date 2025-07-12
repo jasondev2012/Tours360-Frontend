@@ -12,6 +12,12 @@ export interface IDestinoRequest {
     codigoDepartamento: string;
     codigoProvincia: string;
     codigoDistrito: string;
+    itinerario: string;
+    terminosCondiciones: string;
+    recomendaciones: string;
+    incluye: string;
+    noIncluye: string;
+    observaciones: string;
 }
 
 export interface IDestinoListResponse{
