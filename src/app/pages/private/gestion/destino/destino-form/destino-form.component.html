@@ -109,19 +109,49 @@
                             class="w-full" />
                     </div>
                     <div class="col-span-12 p-3">
-                        <h3>Imágenes <small>(total max. 3MB)</small></h3>
+                        <h3>Imágenes <small>(total max. {{pesoMaximoActualizado | size}})</small></h3>
                         <p-divider />
                     </div>
-                    <div class="col-span-12 p-3">
-                        <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php"
-                            (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="3000000"
-                            mode="advanced" [showUploadButton]="false" (onSelect)="onFileSelect($event)"
-                            chooseLabel="Escoger imágnes" cancelLabel="Cancelar"
-                            invalidFileTypeMessageDetail="Solo puede subir imágenes y máximo de 3MB por destino">
+                    <div class="col-span-12 md:col-span-6 p-3">
+                        <label>Imágenes por subir {{permiteSubirImagen}}</label>
+                        <p-fileupload 
+                            #uploader
+                            [customUpload]="true"
+                            [auto]="false"
+                            [disabled]="!permiteSubirImagen"
+                            [multiple]="true" accept="image/*" [maxFileSize]="pesoMaximoActualizado"
+                            (onRemove)="onFileRemove($event)"
+                            (onSelect)="onFileSelect($event)"
+                            (onBeforeUpload)="onBeforeUpload($event)"
+                            mode="advanced"
+                            
+                            [showUploadButton]="false"
+                            chooseLabel="Escoger imágenes" cancelLabel="Cancelar"
+                            invalidFileSizeMessageDetail="Solo le queda por subir {{pesoMaximoActualizado | size}}."
+                            invalidFileSizeMessageSummary="Ups,"
+                            invalidFileTypeMessageDetail="Solo puede subir imágenes"
+                            >
                             <ng-template #empty>
                                 <div>Suelte imágenes o escoja alguno.</div>
                             </ng-template>
                         </p-fileupload>
+                    </div>
+                    <div class="col-span-12 md:col-span-6 p-3">
+                        <label>Imágenes subidas ({{pesoTotal | size }})</label>
+                        <p-panel>
+                            <div class="flex flex-wrap gap-4">
+                                <div *ngFor="let imagen of imagenesDestino"
+                                    class="flex flex-col justify-between w-32 p-2 border rounded shadow">
+
+                                    <p-image [src]="imagen.url" alt="Imagen" [preview]="true" class="w-full" />
+                                    <small class="text-center">{{imagen.peso | size }}</small>
+
+                                    <p-button (onClick)="onEliminarImagenClick(imagen.id, $event)" icon="pi pi-trash"
+                                        variant="outlined" severity="danger" styleClass="w-full mx-auto" />
+                                </div>
+                            </div>
+
+                        </p-panel>
                     </div>
                 </div>
             </p-tabpanel>
@@ -180,7 +210,8 @@
                                 </span>
                             </ng-template>
                         </p-editor>
-                    </div><div class="col-span-12 md:col-span-6 p-3">
+                    </div>
+                    <div class="col-span-12 md:col-span-6 p-3">
                         <h5>¿Qué NO incluye?</h5>
                         <p-editor formControlName="noIncluye" [style]="{ height: 'auto' }">
                             <ng-template #header>

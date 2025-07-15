@@ -92,7 +92,8 @@
                 </td>
                 <td>
                     <p-button (onClick)="onEditarClick(destino.id)" icon="pi pi-pencil" severity="success" class="mr-2" title="Editar" />
-                    <p-button icon="pi pi-trash" severity="danger" title="Eliminar" />
+                    <p-button (onClick)="onEliminarClick(destino.id, $event)" *ngIf="destino.activo" icon="pi pi-trash" severity="danger" title="Eliminar" />
+                    <p-button (onClick)="onEliminarClick(destino.id, $event)" *ngIf="!destino.activo" icon="pi pi-unlock" severity="info" title="Activar" />
                 </td>
             </tr>
             <tr *ngIf="loading">

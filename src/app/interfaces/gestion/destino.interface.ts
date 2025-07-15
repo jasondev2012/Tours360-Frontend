@@ -18,6 +18,7 @@ export interface IDestinoRequest {
     incluye: string;
     noIncluye: string;
     observaciones: string;
+    imagenesDestino: IImagenDestinoLista[];
 }
 
 export interface IDestinoListResponse{
@@ -29,4 +30,12 @@ export interface IDestinoListResponse{
     eventosCerrados: number;
     imagenReferencia: string;
     activo: boolean;
+}
+
+export interface IImagenDestinoLista{
+    id: number;
+    nombre: string;
+    url: string;
+    peso: number;
+    id_destino: number;
 }

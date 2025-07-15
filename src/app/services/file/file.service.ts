@@ -6,7 +6,7 @@ import { LoginRequest } from '../../interfaces/auth/login.interface';
 import { ICustomDataResponse } from '../../common/interfaces/custom-response.interface';
 import { SessionResponse } from '../../common/services/sesion.service';
 import { ICatalogoGenerico } from '../../interfaces/catalogo/catalogo.interface';
-import { IDestinoListResponse, IDestinoRequest } from '../../interfaces/gestion/destino.interface';
+import { IDestinoListResponse, IDestinoRequest, IImagenDestinoLista } from '../../interfaces/gestion/destino.interface';
 import { IFilterRequest, IPaginatedResponse } from '../../interfaces/common/filter.interface';
 
 @Injectable({
@@ -28,5 +28,8 @@ export class FileService {
             formData.append('files', file);
         });
         return this.http.post<ICustomDataResponse<number>>(`${this.api}registrar`, formData)
+    }
+    eliminar(codigo: string, id:number){
+        return this.http.get<ICustomDataResponse<IImagenDestinoLista[]>>(`${this.api}eliminar?codigo=${codigo}&id=${id}`)
     }
 }
