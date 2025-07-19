@@ -25,6 +25,9 @@ export class DestinoService {
     eliminar(id: number): Observable<ICustomDataResponse<string>>{
         return this.http.get<ICustomDataResponse<string>>(`${this.api}eliminar/${id}`)
     }
+    activar(id: number): Observable<ICustomDataResponse<string>>{
+        return this.http.get<ICustomDataResponse<string>>(`${this.api}activar/${id}`)
+    }
     registrar(request: IDestinoRequest): Observable<ICustomDataResponse<number>>{
         return this.http.post<ICustomDataResponse<number>>(`${this.api}registrar`, request)
     }

@@ -108,4 +108,16 @@ export class DestinoListarComponent {
             },
         });
     }
+    onActivarClick(id: number){
+        this.destinoService.activar(id).subscribe({
+            next: res => {
+                if(res.success){
+                    this.messageService.showSuccess(res.message);
+                    this.listar({})
+                }else{
+                    this.messageService.showError(res.message)
+                }
+            }
+        })
+    }
 }
