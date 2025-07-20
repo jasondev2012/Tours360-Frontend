@@ -1,22 +1,30 @@
 <div class="card p-0" style="padding: 0; margin-bottom: 10px !important;">
     <p-breadcrumb [model]="items" [home]="home" />
 </div>
-<div class="card">
-    <p-tabs value="0">
+<div class="card" [formGroup]="eventoForm">
+    <p-tabs value="{{indexTab}}" (valueChange)="onTabChange()">
         <p-tablist>
             <p-tab value="0">Principal</p-tab>
             <p-tab value="1">Adicional</p-tab>
         </p-tablist>
-        <p-tabpanels [formGroup]="destinoForm">
+        <p-tabpanels>
             <p-tabpanel value="0">
                 <div class="grid grid-cols-12">
                     <div class="col-span-12 p-3">
                         <h3>Datos Generales</h3>
                         <p-divider />
                     </div>
+                    <div class="col-span-12 p-3 ">
+                        <label for="class" class="w-full">Destino</label>
+                        <p-select formControlName="idDestino" [appShowErrors]="eventoForm.get('idDestino')"
+                            styleClass="w-full" [options]="listaDestinos" class="mr-2" [showClear]="true"
+                            optionLabel="nombre" optionValue="id" [filter]="true" filterBy="nombre"
+                            (onChange)="onDestinoChange($event)" placeholder="Seleccione un destino" />
+                    </div>
+
                     <div class="col-span-12 md:col-span-6 p-3 ">
                         <label for="class">Título</label>
-                        <input formControlName="titulo" [appShowErrors]="destinoForm.get('titulo')" type="text"
+                        <input formControlName="titulo" [appShowErrors]="eventoForm.get('titulo')" type="text"
                             class="w-full" pInputText />
                     </div>
                     <div class="col-span-12 md:col-span-6 p-3">
@@ -25,8 +33,9 @@
                     </div>
                     <div class="col-span-12 p-3">
                         <label for="class">Descripción</label>
-                        <p-editor formControlName="descripcion" [style]="{ height: 'auto' }"
-                            [appShowErrors]="destinoForm.get('descripcion')">
+                        <p-editor formControlName="descripcion"
+                            [readonly]="readonly"
+                            [style]="{ height: 'auto' }" [appShowErrors]="eventoForm.get('descripcion')">
                             <ng-template #header>
                                 <span class="ql-formats">
                                     <button type="button" class="ql-bold" aria-label="Bold"></button>
@@ -38,14 +47,14 @@
                     </div>
                     <div class="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 p-3">
                         <label for="class">Categoria</label>
-                        <p-select [appShowErrors]="destinoForm.get('idCategoria')" [options]="categoria"
+                        <p-select [appShowErrors]="eventoForm.get('idCategoria')" [options]="categoria"
                             formControlName="idCategoria" [showClear]="true" [filter]="true" filterBy="nombre"
                             optionLabel="nombre" optionValue="id" placeholder="Selecciona una categoría"
                             class="w-full" />
                     </div>
                     <div class="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 p-3">
                         <label for="class">Nivel de exigencia</label>
-                        <p-select [appShowErrors]="destinoForm.get('idNivelExigencia')" [options]="nivelExigencia"
+                        <p-select [appShowErrors]="eventoForm.get('idNivelExigencia')" [options]="nivelExigencia"
                             formControlName="idNivelExigencia" [showClear]="true" [filter]="true" filterBy="nombre"
                             optionLabel="nombre" optionValue="id" placeholder="Selecciona un nivel de exigencia"
                             class="w-full" />
@@ -57,28 +66,28 @@
                     <div class="col-span-12 md:col-span-6 lg:col-span-3 p-3">
                         <label for="class">Precio Base Soles</label>
                         <p-inputNumber formControlName="precioBaseSoles"
-                            [appShowErrors]="destinoForm.get('precioBaseSoles')" mode="currency" [maxFractionDigits]="2"
+                            [appShowErrors]="eventoForm.get('precioBaseSoles')" mode="currency" [maxFractionDigits]="2"
                             [minFractionDigits]="2" [max]="9999999999.99" currency="PEN" locale="es-PE"
                             styleClass="w-full" />
                     </div>
                     <div class="col-span-12 md:col-span-6 lg:col-span-3 p-3">
                         <label for="class">Precio Venta Soles</label>
                         <p-inputNumber formControlName="precioVentaSoles"
-                            [appShowErrors]="destinoForm.get('precioVentaSoles')" mode="currency"
-                            [maxFractionDigits]="2" [minFractionDigits]="2" [max]="9999999999.99" currency="PEN"
-                            locale="es-PE" styleClass="w-full" />
+                            [appShowErrors]="eventoForm.get('precioVentaSoles')" mode="currency" [maxFractionDigits]="2"
+                            [minFractionDigits]="2" [max]="9999999999.99" currency="PEN" locale="es-PE"
+                            styleClass="w-full" />
                     </div>
                     <div class="col-span-12 md:col-span-6 lg:col-span-3 p-3">
                         <label for="class">Precio Base Dolares</label>
                         <p-inputNumber formControlName="precioBaseDolares"
-                            [appShowErrors]="destinoForm.get('precioBaseDolares')" mode="currency"
+                            [appShowErrors]="eventoForm.get('precioBaseDolares')" mode="currency"
                             [maxFractionDigits]="2" [minFractionDigits]="2" [max]="9999999999.99" currency="USD"
                             locale="en-US" styleClass="w-full" />
                     </div>
                     <div class="col-span-12 md:col-span-6 lg:col-span-3 p-3">
                         <label for="class">Precio Venta Dolares</label>
                         <p-inputNumber formControlName="precioVentaDolares"
-                            [appShowErrors]="destinoForm.get('precioVentaDolares')" mode="currency"
+                            [appShowErrors]="eventoForm.get('precioVentaDolares')" mode="currency"
                             [maxFractionDigits]="2" [minFractionDigits]="2" [max]="9999999999.99" currency="USD"
                             locale="en-US" styleClass="w-full" />
                     </div>
@@ -89,21 +98,21 @@
                     </div>
                     <div class="col-span-12 md:col-span-6 lg:col-span-4 p-3">
                         <label for="class">Departamento</label>
-                        <p-select [appShowErrors]="destinoForm.get('codigoDepartamento')" [options]="departamentos"
+                        <p-select [appShowErrors]="eventoForm.get('codigoDepartamento')" [options]="departamentos"
                             formControlName="codigoDepartamento" [showClear]="true" [filter]="true" filterBy="nombre"
                             optionLabel="nombre" optionValue="codigo" (onChange)="onDepartamentoChange($event)"
                             placeholder="Selecciona un departamento" class="w-full" />
                     </div>
                     <div class="col-span-12 md:col-span-6 lg:col-span-4 p-3">
                         <label for="class">Provincia</label>
-                        <p-select [appShowErrors]="destinoForm.get('codigoProvincia')" [options]="provincias"
+                        <p-select [appShowErrors]="eventoForm.get('codigoProvincia')" [options]="provincias"
                             formControlName="codigoProvincia" [showClear]="true" [filter]="true" filterBy="nombre"
                             optionLabel="nombre" optionValue="codigo" (onChange)="onProvinciaChange($event)"
                             placeholder="Selecciona una provincia" class="w-full" />
                     </div>
                     <div class="col-span-12 md:col-span-6 lg:col-span-4 p-3">
                         <label for="class">Distrito</label>
-                        <p-select [appShowErrors]="destinoForm.get('codigoDistrito')" [options]="distritos"
+                        <p-select [appShowErrors]="eventoForm.get('codigoDistrito')" [options]="distritos"
                             formControlName="codigoDistrito" [showClear]="true" [filter]="true" filterBy="nombre"
                             optionLabel="nombre" optionValue="codigo" placeholder="Selecciona un distrito"
                             class="w-full" />
@@ -113,24 +122,15 @@
                         <p-divider />
                     </div>
                     <div class="col-span-12 md:col-span-6 p-3">
-                        <label>Imágenes por subir {{permiteSubirImagen}}</label>
-                        <p-fileupload 
-                            #uploader
-                            [customUpload]="true"
-                            [auto]="false"
-                            [disabled]="!permiteSubirImagen"
+                        <label>Imágenes por subir</label>
+                        <p-fileupload #uploader [customUpload]="true" [auto]="false" [disabled]="!permiteSubirImagen"
                             [multiple]="true" accept="image/*" [maxFileSize]="pesoMaximoActualizado"
-                            (onRemove)="onFileRemove($event)"
-                            (onSelect)="onFileSelect($event)"
-                            (onBeforeUpload)="onBeforeUpload($event)"
-                            mode="advanced"
-                            
-                            [showUploadButton]="false"
+                            (onRemove)="onFileRemove($event)" (onSelect)="onFileSelect($event)"
+                            (onBeforeUpload)="onBeforeUpload($event)" mode="advanced" [showUploadButton]="false"
                             chooseLabel="Escoger imágenes" cancelLabel="Cancelar"
                             invalidFileSizeMessageDetail="Solo le queda por subir {{pesoMaximoActualizado | size}}."
                             invalidFileSizeMessageSummary="Ups,"
-                            invalidFileTypeMessageDetail="Solo puede subir imágenes"
-                            >
+                            invalidFileTypeMessageDetail="Solo puede subir imágenes">
                             <ng-template #empty>
                                 <div>Suelte imágenes o escoja alguno.</div>
                             </ng-template>
@@ -140,7 +140,7 @@
                         <label>Imágenes subidas ({{pesoTotal | size }})</label>
                         <p-panel>
                             <div class="flex flex-wrap gap-4">
-                                <div *ngFor="let imagen of imagenesDestino"
+                                <div *ngFor="let imagen of imagenesEvento"
                                     class="flex flex-col justify-between w-32 p-2 border rounded shadow">
 
                                     <p-image [src]="imagen.url" alt="Imagen" [preview]="true" class="w-full" />
@@ -159,7 +159,8 @@
                 <div class="grid grid-cols-12">
                     <div class="col-span-12 md:col-span-6 p-3">
                         <h5>Itinerario</h5>
-                        <p-editor formControlName="itinerario" [style]="{ height: 'auto' }">
+                        <p-editor [readonly]="readonly"
+                            formControlName="itinerario" [style]="{ height: 'auto' }">
                             <ng-template #header>
                                 <span class="ql-formats">
                                     <select class="ql-header" aria-label="Header level">
@@ -186,7 +187,8 @@
                     </div>
                     <div class="col-span-12 md:col-span-6 p-3">
                         <h5>¿Qué incluye?</h5>
-                        <p-editor formControlName="incluye" [style]="{ height: 'auto' }">
+                        <p-editor [readonly]="readonly"
+                            formControlName="incluye" [style]="{ height: 'auto' }">
                             <ng-template #header>
                                 <span class="ql-formats">
                                     <select class="ql-header" aria-label="Header level">
@@ -213,7 +215,8 @@
                     </div>
                     <div class="col-span-12 md:col-span-6 p-3">
                         <h5>¿Qué NO incluye?</h5>
-                        <p-editor formControlName="noIncluye" [style]="{ height: 'auto' }">
+                        <p-editor [readonly]="readonly"
+                            formControlName="noIncluye" [style]="{ height: 'auto' }">
                             <ng-template #header>
                                 <span class="ql-formats">
                                     <select class="ql-header" aria-label="Header level">
@@ -240,7 +243,9 @@
                     </div>
                     <div class="col-span-12 md:col-span-6 p-3">
                         <h5>Recomendaciones</h5>
-                        <p-editor formControlName="recomendaciones" [style]="{ height: 'auto' }">
+                        <p-editor
+                            [readonly]="readonly"
+                            formControlName="recomendaciones" [style]="{ height: 'auto' }">
                             <ng-template #header>
                                 <span class="ql-formats">
                                     <select class="ql-header" aria-label="Header level">
@@ -267,7 +272,9 @@
                     </div>
                     <div class="col-span-12 md:col-span-6 p-3">
                         <h5>Términos y Condiciones</h5>
-                        <p-editor formControlName="terminosCondiciones" [style]="{ height: 'auto' }">
+                        <p-editor
+                            [readonly]="readonly"
+                            formControlName="terminosCondiciones" [style]="{ height: 'auto' }">
                             <ng-template #header>
                                 <span class="ql-formats">
                                     <select class="ql-header" aria-label="Header level">
@@ -294,7 +301,9 @@
                     </div>
                     <div class="col-span-12 md:col-span-6 p-3">
                         <h5>Observaciones adicionales</h5>
-                        <p-editor formControlName="observaciones" [style]="{ height: 'auto' }">
+                        <p-editor
+                            [readonly]="readonly"
+                            formControlName="observaciones" [style]="{ height: 'auto' }">
                             <ng-template #header>
                                 <span class="ql-formats">
                                     <select class="ql-header" aria-label="Header level">

@@ -1,7 +1,8 @@
 import { IImagenModel } from "../common/imagen.interface";
 
-export interface IDestinoRequest {
+export interface IEventoRequest {
     id: number;
+    idDestino: number;
     titulo: string;
     subtitulo: string;
     descripcion: string;
@@ -20,10 +21,24 @@ export interface IDestinoRequest {
     incluye: string;
     noIncluye: string;
     observaciones: string;
-    imagenesDestino: IImagenDestinoLista[];
+    imagenesEvento: IImagenEventoLista[];
+
+    
+    urlGrupoWhatsapp: string;
+    urlRepositorio: string;
+    aplicaDescuento: string;
+    fechaFinDescuento: string;
+    descuento: string;
+    aplicaDescuentoGrupo: string;
+    cantidadMinimaGrupo: string;
+    fechaFinDescuentoGrupo: string;
+    descuentoGrupo: string;
+    fechaPublicacion: string;
+    fechaInicio: string;
+    fechaFin: string;
 }
 
-export interface IDestinoListResponse{
+export interface IEventoListResponse{
     id: number;
     titulo: string;
     precioVentaSoles: number;
@@ -34,6 +49,5 @@ export interface IDestinoListResponse{
     activo: boolean;
 }
 
-export interface IImagenDestinoLista extends IImagenModel{
-
+export interface IImagenEventoLista extends IImagenModel{
 }

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FileUpload, FileUploadModule, UploadEvent } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { CustomMessageService } from '../../../../../common/services/custom-message.service';
@@ -9,7 +9,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { EditorModule } from 'primeng/editor';
 import { InputNumber } from 'primeng/inputnumber';
 import { DividerModule } from 'primeng/divider';
-import { SelectModule } from 'primeng/select';
+import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { TipoCatalogo } from '../../../../../common/enums/tipo_catalogo.enum';
 import { ICatalogoGenerico } from '../../../../../interfaces/catalogo/catalogo.interface';
 import { CatalogoService } from '../../../../../services/catalogo/catalogo.service';
@@ -26,6 +26,9 @@ import { TipoArchivo } from '../../../../../common/enums/files.enum';
 import { ImageModule } from 'primeng/image';
 import { PanelModule } from 'primeng/panel';
 import { SizePipe } from '../../../../../common/pipe/size.pipe';
+import { ForceValueRenderDirective } from '../../../../../common/directives/force-value-render.directive';
+import { IEventoRequest } from '../../../../../interfaces/gestion/evento.interface';
+import { EventoService } from '../../../../../services/gestion/evento.service';
 const PRIME_NG = [PanelModule, ImageModule, BreadcrumbModule, ButtonModule, InputTextModule, FileUploadModule, TextareaModule, EditorModule, InputNumber, DividerModule, SelectModule, TabsModule];
 
 @Component({
@@ -37,7 +40,8 @@ const PRIME_NG = [PanelModule, ImageModule, BreadcrumbModule, ButtonModule, Inpu
 export class EventoFormComponent {
     @ViewChild('uploader') uploader!: FileUpload;
     imagenes: File[] = [];
-    destinoForm: FormGroup;
+    listaDestinos!: ICatalogoGenerico[];
+    eventoForm: FormGroup;
     departamentos!: ICatalogoGenerico[];
     categoria!: ICatalogoGenerico[];
     nivelExigencia!: ICatalogoGenerico[];
@@ -47,14 +51,17 @@ export class EventoFormComponent {
     home: MenuItem | undefined;
     imageChangedEvent: any = '';
     croppedImage: string = '';
-    imagenesDestino: IImagenDestinoLista[];
+    imagenesEvento: IImagenDestinoLista[];
     id: number | null;
     pesoMaximo: number = 3145728; //3MB
     pesoMaximoActualizado: number = 3145728; //3MB
     permiteSubirImagen = true;
     pesoTotal: number = 0;
-    get destino(): IDestinoRequest {
-        return this.destinoForm.getRawValue() as IDestinoRequest;
+    indexTab: number = 0;
+    obtenido: boolean = false;
+    readonly: boolean = true;
+    get evento(): IEventoRequest {
+        return this.eventoForm.getRawValue() as IEventoRequest;
     }
 
     constructor(
@@ -63,12 +70,13 @@ export class EventoFormComponent {
         private router: Router,
         private route: ActivatedRoute,
         private catalogoService: CatalogoService,
-        private destinoService: DestinoService,
+        private eventoService: EventoService,
         private fileService: FileService,
-        private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService,
+        private cdr: ChangeDetectorRef
     ) {
         this.id = Number(this.route.snapshot.paramMap.get('id')) || null;
-        this.imagenesDestino = [];
+        this.imagenesEvento = [];
         this.items = [{ label: this.id ? 'Editar' : 'Nuevo' }];
         this.home = {
             icon: 'pi pi-fw pi-ticket',
@@ -79,38 +87,53 @@ export class EventoFormComponent {
             }
         };
 
-        this.destinoForm = this.fb.group({
+        this.eventoForm = this.fb.group({
             id: [this.id],
-            titulo: ['', [Validators.required]],
-            subtitulo: [''],
-            descripcion: ['', [Validators.required]],
-            idCategoria: [null, [Validators.required]],
-            idNivelExigencia: [null, [Validators.required]],
-            precioBaseSoles: [null, [Validators.required]],
-            precioVentaSoles: [null, [Validators.required]],
-            precioBaseDolares: [null],
-            precioVentaDolares: [null],
-            codigoDepartamento: [null, [Validators.required]],
-            codigoProvincia: [null, [Validators.required]],
-            codigoDistrito: [null, [Validators.required]],
-            itinerario: [''],
-            terminosCondiciones: [''],
-            recomendaciones: [''],
-            incluye: [''],
-            noIncluye: [''],
-            observaciones: ['']
+            idDestino: [null, [Validators.required]],
+            titulo: [{ value: null, disabled: true }, [Validators.required]],
+            subtitulo: [{ value: null, disabled: true }],
+            descripcion: [{ value: null, disabled: true }, [Validators.required]],
+            idCategoria: [{ value: null, disabled: true }, [Validators.required]],
+            idNivelExigencia: [{ value: null, disabled: true }, [Validators.required]],
+            codigoDepartamento: [{ value: null, disabled: true }, [Validators.required]],
+            codigoProvincia: [{ value: null, disabled: true }, [Validators.required]],
+            codigoDistrito: [{ value: null, disabled: true }, [Validators.required]],
+            itinerario: [null, [Validators.required]],
+            terminosCondiciones: [{ value: null, disabled: true }, [Validators.required]],
+            recomendaciones: [{ value: null, disabled: true }],
+            incluye: [{ value: null, disabled: true }, [Validators.required]],
+            noIncluye: [{ value: null, disabled: true }, [Validators.required]],
+            observaciones: [{ value: null, disabled: true }],
+            precioBaseSoles: [{ value: null, disabled: true }, [Validators.required]],
+            precioVentaSoles: [{ value: null, disabled: true }, [Validators.required]],
+            precioBaseDolares: [{ value: null, disabled: true }],
+            precioVentaDolares: [{ value: null, disabled: true }],
+            urlGrupoWhatsapp: [null],
+            urlGrupoTelegram: [null],
+            urlGrupoFacebook: [null],
+            urlRepositorio: [null],
+            aplicaDescuento: [null],
+            fechaFinDescuento: [null],
+            descuento: [null],
+            aplicaDescuentoGrupo: [null],
+            cantidadMinimaGrupo: [null],
+            fechaFinDescuentoGrupo: [null],
+            descuentoGrupo: [null],
+            fechaPublicacion: [null],
+            fechaInicio: [null],
+            fechaFin: [null]
         });
 
         if (this.id) {
-            this.destinoService.obtener(this.id).subscribe({
+            this.eventoService.obtener(this.id).subscribe({
                 next: (res) => {
                     if (res.success) {
-                        this.destinoForm.patchValue(res.data);
+                        this.eventoForm.patchValue(res.data);
                         if (res.data && res.data.codigoDepartamento) {
                             this.onDepartamentoChange({ value: res.data.codigoDepartamento });
                             this.onProvinciaChange({ value: res.data.codigoProvincia || null });
                         }
-                        this.imagenesDestino = res.data.imagenesDestino;
+                        this.imagenesEvento = res.data.imagenesEvento;
                         this.actualizarPesoYEstado();
                     } else {
                         this.messageService.showError(res.message);
@@ -125,14 +148,47 @@ export class EventoFormComponent {
         forkJoin({
             departamentos: this.catalogoService.listar(TipoCatalogo.DEPARTAMENTOS),
             categorias: this.catalogoService.listar(TipoCatalogo.CATEGORIA_DESTINO),
-            niveles: this.catalogoService.listar(TipoCatalogo.NIVEL_EXIGENCIA)
+            niveles: this.catalogoService.listar(TipoCatalogo.NIVEL_EXIGENCIA),
+            destinos: this.catalogoService.listar(TipoCatalogo.DESTINOS)
         }).subscribe({
             next: (res) => {
                 this.departamentos = res.departamentos.data;
                 this.categoria = res.categorias.data;
                 this.nivelExigencia = res.niveles.data;
+                this.listaDestinos = res.destinos.data;
             }
         });
+    }
+    onDestinoChange(event: SelectChangeEvent) {
+        if (event && event.value) {
+            let idPrevio = this.evento.id;
+            this.eventoService.obtener(event.value).subscribe({
+                next: (res) => {
+                    if (res.success) {
+                        this.eventoForm.patchValue(res.data);
+                        this.eventoForm.get('id')?.setValue(idPrevio);
+                        this.eventoForm.get('idDestino')?.setValue(event.value);
+                        this.obtenido = true;
+                        this.readonly = false;
+                        if (res.data && res.data.codigoDepartamento) {
+                            this.onDepartamentoChange({ value: res.data.codigoDepartamento });
+                            this.onProvinciaChange({ value: res.data.codigoProvincia || null });
+                        }
+                        this.imagenesEvento = res.data.imagenesEvento;
+                        this.actualizarPesoYEstado();
+                        this.habilitarCampos();
+                    } else {
+                        this.messageService.showError(res.message);
+                    }
+                }
+            });
+        } else {
+            this.readonly = true;
+            this.obtenido = true;
+            this.imagenesEvento = [];
+            this.actualizarPesoYEstado();
+            this.limpiarForm();
+        }
     }
 
     onFileSelect(event: any): void {
@@ -185,7 +241,7 @@ export class EventoFormComponent {
                 this.fileService.eliminar(TipoArchivo.IMAGEN_DESTINO, id).subscribe({
                     next: (res) => {
                         if (res.success) {
-                            this.imagenesDestino = res.data;
+                            this.imagenesEvento = res.data;
                             this.messageService.showSuccess(res.message);
                             this.actualizarPesoYEstado();
                         } else {
@@ -200,10 +256,12 @@ export class EventoFormComponent {
         this.router.navigate(['../gestion/eventos'], { relativeTo: this.route.parent });
     }
     onGuardarClick() {
-        if (!this.destinoForm.valid) {
+        if (!this.eventoForm.valid) {
             this.messageService.showWarn('Debe completar los datos obligatorios (*)');
         } else {
-            this.destinoService.registrar(this.destino).subscribe({
+            console.table(this.evento)
+            return;
+            this.eventoService.registrar(this.evento).subscribe({
                 next: (res) => {
                     if (res.success) {
                         if (this.pesoMaximo == this.pesoMaximoActualizado) {
@@ -221,7 +279,7 @@ export class EventoFormComponent {
                                         this.router.navigate(['../gestion/destinos'], { relativeTo: this.route.parent });
                                     }
                                 });
-                            }else{
+                            } else {
                                 this.messageService.showSuccess(res.message);
                                 this.router.navigate(['../gestion/destinos'], { relativeTo: this.route.parent });
                             }
@@ -251,9 +309,79 @@ export class EventoFormComponent {
         this.imagenes = this.imagenes.filter((file) => file !== fileToRemove);
         this.actualizarPesoYEstado();
     }
+    onTabChange() {
+        if (this.obtenido) {
+            this.obtenido = false;
+            this.cdr.detectChanges(); // fuerza una detección de cambios
+
+            this.eventoForm.patchValue({
+                itinerario: this.evento.itinerario,
+                incluye: this.evento.incluye,
+                noIncluye: this.evento.noIncluye,
+                recomendaciones: this.evento.recomendaciones,
+                terminosCondiciones: this.evento.terminosCondiciones,
+                observaciones: this.evento.observaciones
+            });
+        }
+    }
+    habilitarCampos() {
+        this.eventoForm.get('titulo')?.enable();
+        this.eventoForm.get('subtitulo')?.enable();
+        this.eventoForm.get('descripcion')?.enable();
+        this.eventoForm.get('idCategoria')?.enable();
+        this.eventoForm.get('idNivelExigencia')?.enable();
+        this.eventoForm.get('codigoDepartamento')?.enable();
+        this.eventoForm.get('codigoProvincia')?.enable();
+        this.eventoForm.get('codigoDistrito')?.enable();
+        this.eventoForm.get('itinerario')?.enable();
+        this.eventoForm.get('terminosCondiciones')?.enable();
+        this.eventoForm.get('recomendaciones')?.enable();
+        this.eventoForm.get('incluye')?.enable();
+        this.eventoForm.get('noIncluye')?.enable();
+        this.eventoForm.get('observaciones')?.enable();
+        this.eventoForm.get('precioBaseSoles')?.enable();
+        this.eventoForm.get('precioVentaSoles')?.enable();
+        this.eventoForm.get('precioBaseDolares')?.enable();
+        this.eventoForm.get('precioVentaDolares')?.enable();
+        this.eventoForm.updateValueAndValidity();
+    }
+    limpiarForm() {
+        const campos: string[] = [
+            'id',
+            'titulo',
+            'subtitulo',
+            'descripcion',
+            'idCategoria',
+            'idNivelExigencia',
+            'codigoDepartamento',
+            'codigoProvincia',
+            'codigoDistrito',
+            'itinerario',
+            'terminosCondiciones',
+            'recomendaciones',
+            'incluye',
+            'noIncluye',
+            'observaciones',
+            'precioBaseSoles',
+            'precioVentaSoles',
+            'precioBaseDolares',
+            'precioVentaDolares'
+        ];
+
+        campos.forEach((campo) => {
+            const control = this.eventoForm.get(campo);
+            if (control) {
+                control.setValue(campo === 'id' ? this.id : null);
+                control.disable();
+            }
+        });
+
+        this.cdr.detectChanges();
+    }
+
     actualizarPesoYEstado(): void {
         const pesoTemporales = this.imagenes.reduce((total, archivo) => total + (archivo.size || 0), 0);
-        const pesoTotal = pesoTemporales + (this.imagenesDestino == null ? 0 : this.imagenesDestino.reduce((total, x) => total + (x.peso || 0), 0));
+        const pesoTotal = pesoTemporales + (this.imagenesEvento == null ? 0 : this.imagenesEvento.reduce((total, x) => total + (x.peso || 0), 0));
         this.pesoMaximoActualizado = Math.max(this.pesoMaximo - pesoTotal, 0);
         this.permiteSubirImagen = pesoTotal < this.pesoMaximo;
         this.pesoTotal = pesoTotal; // guardar si lo necesitas
