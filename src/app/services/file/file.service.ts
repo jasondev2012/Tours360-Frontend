@@ -19,10 +19,10 @@ export class FileService {
         this.api = environment.api + 'file/'
     }
 
-    registrar(codigo: string, idDestino: number, files: File[]): Observable<ICustomDataResponse<number>>{
+    registrar(codigo: string, data: string, files: File[]): Observable<ICustomDataResponse<number>>{
         const formData = new FormData();
         formData.append('codigo', codigo);
-        formData.append('idDestino', idDestino.toString());
+        formData.append('data', data);
 
         files.forEach((file, index) => {
             formData.append('files', file);

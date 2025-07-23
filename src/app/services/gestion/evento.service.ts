@@ -17,7 +17,7 @@ export class EventoService {
     api: string = '';
     constructor(private http: HttpClient,
     ) {
-        this.api = environment.api + 'destino/'
+        this.api = environment.api + 'evento/'
     }
 
     obtener(id: number): Observable<ICustomDataResponse<IEventoRequest>>{

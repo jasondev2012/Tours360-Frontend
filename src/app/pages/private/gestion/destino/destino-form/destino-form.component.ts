@@ -212,7 +212,10 @@ export class DestinoFormComponent {
                             this.router.navigate(['../gestion/destinos'], { relativeTo: this.route.parent });
                         } else {
                             if (this.imagenes && this.imagenes.length > 0) {
-                                this.fileService.registrar(TipoArchivo.IMAGEN_DESTINO, res.data, this.imagenes).subscribe({
+                                let data = {
+                                    idDestino: res.data
+                                }
+                                this.fileService.registrar(TipoArchivo.IMAGEN_DESTINO, JSON.stringify(data), this.imagenes).subscribe({
                                     next: (resImg) => {
                                         if (!resImg.success) {
                                             this.messageService.showInfo(resImg.message);

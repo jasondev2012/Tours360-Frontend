@@ -25,17 +25,19 @@ export interface IEventoRequest {
 
     
     urlGrupoWhatsapp: string;
+    urlGrupoTelegram: string;
+    urlGrupoFacebook: string;
     urlRepositorio: string;
-    aplicaDescuento: string;
-    fechaFinDescuento: string;
-    descuento: string;
-    aplicaDescuentoGrupo: string;
-    cantidadMinimaGrupo: string;
-    fechaFinDescuentoGrupo: string;
-    descuentoGrupo: string;
+    cantidadMinimaGrupo: number;
+    fechaFinDescuento: Date;
+    fechaFinDescuentoGrupo: Date;
     fechaPublicacion: string;
     fechaInicio: string;
     fechaFin: string;
+    descuentoGrupo: string;
+    descuento: string;
+    aplicaDescuento: boolean;
+    aplicaDescuentoGrupo: boolean;
 }
 
 export interface IEventoListResponse{
@@ -50,4 +52,6 @@ export interface IEventoListResponse{
 }
 
 export interface IImagenEventoLista extends IImagenModel{
+    esImagenDestino: boolean,
+    rutaImagenDestino: string
 }
